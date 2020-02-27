@@ -14,6 +14,9 @@ def reg_login(cursor, email, password):
         return 1
     return 0
 
+# ********Unregistered User Login********
+
+
 
 if __name__ == "__main__":
     cursor = conn_db()
