@@ -10,7 +10,7 @@ def reg_login(cursor, email, password):
 
 # ********Unregistered User Sing up********
 def sign_up(conn, cursor, email, name, pwd, city, gender):
-    value = cursor.execute('INSERT INTO users (email, name, pwd, city, gender) VALUES(?, ?, ?, ?, ?);',
+    cursor.execute('INSERT INTO users (email, name, pwd, city, gender) VALUES(?, ?, ?, ?, ?);',
                    (email, name, pwd, city, gender))
     conn.commit()
 
