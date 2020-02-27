@@ -5,12 +5,17 @@ import login
 # ********Initialization********
 def conn_db():
     conn = sqlite3.connect(sys.argv[1])
-    cursor = conn.cursor()
-    return cursor
+    return conn
 
+# ********Destruction********
+def disconn_db(conn, cursor):
+    cursor.close()
+    conn.close()
 
+# ********Main********
 if __name__ == "__main__":
-    cursor = conn_db()
+    conn = conn_db()
+    cursor = conn.cursor()
 
     # ********Registered User Login Test********
     value1 = login.reg_login(cursor, 'dne@dne.com', 'password')
@@ -19,3 +24,5 @@ if __name__ == "__main__":
     print(value2)
     value3 = login.reg_login(cursor, 'rupertd@yahoo.ca', 'wrong')
     print(value3)
+
+    disconn_db(conn, cursor)
