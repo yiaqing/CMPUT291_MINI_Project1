@@ -63,10 +63,15 @@ if __name__ == "__main__":
     if associative_sales:
         for i in range(0, len(associative_sales)):
             print(associative_sales[i])
+
+    print("-------------------------------------------------")
+
     associative_sales = list_products.list_sales(cursor, value, 'M03')
     if associative_sales:
         for i in range(0, len(associative_sales)):
             print(associative_sales[i])
+
+    print("-------------------------------------------------")
 
     associative_sales = list_products.list_sales(cursor, value, 'P01')
     if associative_sales:
