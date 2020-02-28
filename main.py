@@ -89,6 +89,5 @@ if __name__ == "__main__":
 
     print("-------------------------------------------------")
 
-
     # ********Disconnect Database********
     disconn_db(conn, cursor)
