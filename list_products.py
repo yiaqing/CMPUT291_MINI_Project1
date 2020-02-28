@@ -12,3 +12,4 @@ def list_products(cursor):
                       ORDER BY number_of_active_sales DESC;''')
     return cursor.fetchall()
 
+# ********
