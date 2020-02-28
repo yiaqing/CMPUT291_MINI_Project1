@@ -81,7 +81,7 @@ def list_sales(cursor, product_list, pid):
                       FROM sales
                       WHERE sales.pid = ?
                       AND sales.edate > DATE('now')
-                      ORDER BY sales.edate ASC''', (pid, ))
+                      ORDER BY sales.edate ASC;''', (pid, ))
 
     return cursor.fetchall()
 
