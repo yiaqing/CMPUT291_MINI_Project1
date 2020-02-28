@@ -61,3 +61,26 @@ def list_reviews(cursor, product_list, pid):
     reviews = cursor.fetchall()
     for i in range(len(reviews)):
         print(reviews[i])
+
+
+# *********List all associative active sales********
+def list_sales(cursor, product_list, pid):
+    pid = pid.upper()
+
+    # Check if pid out of bounds
+    pids = []
+    for i in range(len(product_list)):
+        pids.append(product_list[i][0])
+    if pid not in pids:
+        print("pid out of bound")
+        return 0
+
+    cursor.execute('''SELECT sales.sid AS sid, sales.lister AS lister, \
+                      sales.pid AS pid, sales.edate AS edate, sales.descr AS descr, \
+                      sales.cond AS cond, sales.rprice AS rprice \
+                      FROM sales
+                      WHERE sales.pid = ?
+                      AND sales.edate > DATE('now')''', (pid, ))
+
+    return cursor.fetchall()
+
