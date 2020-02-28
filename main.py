@@ -34,7 +34,7 @@ if __name__ == "__main__":
     login.sign_up(conn, cursor, 'abcdefghijklm@t2.com', 't123', 't123', 'Edmonton', 'A')
     login.sign_up(conn, cursor, 'abcdefghijklm@t2.com', 't12344', 't12444443', 'Edmonton', 'F')
 
-    login.sign_up(conn, cursor, 'abcdefghijklm@t5.com', 't123', 't123', 'Edmonton', 'M')
+    login.sign_up(conn, cursor, 'test1@test.test', 'racHel z', 'test', 'Montreal', 'F')
 
     # ********Listing Products Test********
     # value = list_products.list_products(cursor)
