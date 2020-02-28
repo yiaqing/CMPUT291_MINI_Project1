@@ -15,6 +15,9 @@ def list_products(cursor):
 
 # ********Write product review********
 def write_preview(conn, cursor, pid, reviewer, rating, rtext):
+    pid = pid.upper()
+    reviewer = reviewer.lower()
+
     # Check if rating out of bounds
     if (float(rating) > 5) or (float(rating) < 0):
         print("rating out of bounds.")
@@ -47,6 +50,8 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
 
 # ********List reviews of product********
 def list_reviews(cursor, pid):
+    pid = pid.upper()
+
     # Check if pid out of bounds
     cursor.execute('''SELECT products.pid FROM products;''')
     pids = cursor.fetchall()
