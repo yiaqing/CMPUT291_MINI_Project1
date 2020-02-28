@@ -37,24 +37,25 @@ if __name__ == "__main__":
     login.sign_up(conn, cursor, 'test1@test.test', 'racHel z', 'test', 'Montreal', 'F')
 
     # ********Listing Products Test********
-    # value = list_products.list_products(cursor)
-    # for i in range(0, len(value)):
-    #     print(value[i])
+    value = list_products.list_products(cursor)
+    for i in range(0, len(value)):
+        print(value[i])
 
     # ********Write product review test********
-    # list_products.write_preview(conn, cursor, 'G11', 'ibev@gmail.com', '5', 'test')
-    # list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '5', 'testtesttesttesttesta')
-    # list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '-1', 'test')
-    # list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '6', 'test')
+    # list_products.write_preview(conn, cursor, value, 'G11', 'ibev@gmail.com', '5', 'test')
+    # list_products.write_preview(conn, cursor, value, 'G01', 'ibev@gmail.com', '5', 'testtesttesttesttesta')
+    # list_products.write_preview(conn, cursor, value, 'G01', 'ibev@gmail.com', '-1', 'test')
+    # list_products.write_preview(conn, cursor, value, 'G01', 'ibev@gmail.com', '6', 'test')
 
-    # list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '5', 'test')
-    # list_products.write_preview(conn, cursor, 'g01', 'IBEV@gmail.com', '5', 'test')
+    list_products.write_preview(conn, cursor, value, 'M01', 'ibev@gmail.com', '5', 'test')
+    list_products.write_preview(conn, cursor, value, 'G01', 'ibev@gmail.com', '5', 'test')
 
     # ********List reviews test********
-    # list_products.list_reviews(cursor, 'g10000')
-    # list_products.list_reviews(cursor, 'g11')
-    # list_products.list_reviews(cursor, 'G01')
-    # list_products.list_reviews(cursor, 'g01')
+    list_products.list_reviews(cursor, value, 'g10000')
+    list_products.list_reviews(cursor, value, 'g11')
+    list_products.list_reviews(cursor, value, 'G01')
+    list_products.list_reviews(cursor, value, 'g01')
+    list_products.list_reviews(cursor, value, 'M01')
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)

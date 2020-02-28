@@ -14,7 +14,7 @@ def list_products(cursor):
 
 
 # ********Write product review********
-def write_preview(conn, cursor, pid, reviewer, rating, rtext):
+def write_preview(conn, cursor, product_list, pid, reviewer, rating, rtext):
     pid = pid.upper()
     reviewer = reviewer.lower()
 
@@ -24,14 +24,11 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
         return 0
 
     # Check if pid out of bounds
-    cursor.execute('''SELECT products.pid FROM products;''')
-    pids = cursor.fetchall()
-    flag = 0
-    for i in range(len(pids)):
-        if pids[i][0] == pid:
-            flag = 1
-    if not flag:
-        print("pid out of bounds")
+    pids = []
+    for i in range(len(product_list)):
+        pids.append(product_list[i][0])
+    if pid not in pids:
+        print("pid out of bound")
         return 0
 
     # Check if rtext out of bounds
@@ -49,18 +46,15 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
 
 
 # ********List reviews of product********
-def list_reviews(cursor, pid):
+def list_reviews(cursor, product_list, pid):
     pid = pid.upper()
 
     # Check if pid out of bounds
-    cursor.execute('''SELECT products.pid FROM products;''')
-    pids = cursor.fetchall()
-    flag = 0
-    for i in range(len(pids)):
-        if pids[i][0] == pid:
-            flag = 1
-    if not flag:
-        print("pid out of bounds")
+    pids = []
+    for i in range(len(product_list)):
+        pids.append(product_list[i][0])
+    if pid not in pids:
+        print("pid out of bound")
         return 0
 
     cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?''', (pid, ))

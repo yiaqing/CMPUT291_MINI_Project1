@@ -50,8 +50,13 @@ def sign_up(conn, cursor, email, name, pwd, city, gender):
         print("gender out of bounds")
         return 0
 
-    cursor.execute('INSERT INTO users (email, name, pwd, city, gender) VALUES(?, ?, ?, ?, ?);',
-                   (email, name, pwd, city, gender))
+    try:
+        cursor.execute('INSERT INTO users (email, name, pwd, city, gender) VALUES(?, ?, ?, ?, ?);',
+                       (email, name, pwd, city, gender))
+    except:
+        print("user already exist.")
+        return 0
+
     conn.commit()
     return email
 
