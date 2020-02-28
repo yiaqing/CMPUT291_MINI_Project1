@@ -1,16 +1,20 @@
 import sqlite3
 import sys
 import login
+import list_products
+
 
 # ********Initialization********
 def conn_db():
     conn = sqlite3.connect(sys.argv[1])
     return conn
 
+
 # ********Destruction********
 def disconn_db(conn, cursor):
     cursor.close()
     conn.close()
+
 
 # ********Main********
 if __name__ == "__main__":
@@ -26,6 +30,12 @@ if __name__ == "__main__":
     print(value3)
 
     # ********User Sign up Test********
-    login.sign_up(conn, cursor, 't1@t1.com', 't123', 't123', 'Edmonton', 'M')
+    # login.sign_up(conn, cursor, 't3@t2.com', 't123', 't123', 'Edmonton', 'M')
 
+    # ********Listing Products Test********
+    value = list_products.list_products(cursor)
+    for i in range(0, len(value)):
+        print(value[i])
+
+    # ********Disconnect Database********
     disconn_db(conn, cursor)
