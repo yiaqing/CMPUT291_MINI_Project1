@@ -37,5 +37,13 @@ if __name__ == "__main__":
     for i in range(0, len(value)):
         print(value[i])
 
+    # ********Write product review test********
+    list_products.write_preview(conn, cursor, 'G11', 'ibev@gmail.com', '5', 'test')
+    list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '5', 'testtesttesttesttesta')
+    list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '-1', 'test')
+    list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '6', 'test')
+
+    list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '5', 'test')
+
     # ********Disconnect Database********
     disconn_db(conn, cursor)
