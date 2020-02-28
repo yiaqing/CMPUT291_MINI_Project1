@@ -43,3 +43,22 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
     cursor.execute('''INSERT INTO previews (rid, pid, reviewer, rating, rtext, rdate) \
                       VALUES (?, ?, ?, ?, ?, DATE('now'));''', (rid, pid, reviewer, rating, rtext))
     conn.commit()
+
+
+# ********List reviews of product********
+def list_reviews(cursor, pid):
+    # Check if pid out of bounds
+    cursor.execute('''SELECT products.pid FROM products;''')
+    pids = cursor.fetchall()
+    flag = 0
+    for i in range(len(pids)):
+        if pids[i][0] == pid:
+            flag = 1
+    if not flag:
+        print("pid out of bounds")
+        return 0
+
+    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?''', (pid, ))
+    reviews = cursor.fetchall()
+    for i in range(len(reviews)):
+        print(reviews[i])

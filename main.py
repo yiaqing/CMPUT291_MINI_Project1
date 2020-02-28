@@ -45,5 +45,10 @@ if __name__ == "__main__":
 
     list_products.write_preview(conn, cursor, 'G01', 'ibev@gmail.com', '5', 'test')
 
+    # ********List reviews test********
+    list_products.list_reviews(cursor, 'G10000')
+    list_products.list_reviews(cursor, 'G11')
+    list_products.list_reviews(cursor, 'G01')
+
     # ********Disconnect Database********
     disconn_db(conn, cursor)
