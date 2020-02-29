@@ -2,6 +2,7 @@ import sqlite3
 import sys
 import login
 import list_products
+import search_sales
 
 
 # ********Initialization********
@@ -91,6 +92,12 @@ if __name__ == "__main__":
     if associative_sales:
         for i in range(0, len(associative_sales)):
             print(associative_sales[i])
+
+    print("-------------------------------------------------")
+
+    value = search_sales.search_sales(cursor, '%common%')
+    for i in range(len(value)):
+        print(value[i])
 
     print("-------------------------------------------------")
 
