@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     print("-------------------------------------------------")
 
-    value = search_sales.search_sales(cursor, '%common%')
+    value = search_sales.search_sales(cursor, 'common')
     for i in range(len(value)):
         print(value[i])
 

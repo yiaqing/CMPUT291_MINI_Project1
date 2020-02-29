@@ -3,6 +3,7 @@ import sqlite3
 
 # ********Search for sales*********
 def search_sales(cursor, keywords):
+    keywords = '%' + keywords + '%'
     cursor.execute('''SELECT *
                       FROM
                       (SELECT t1.sid, SUM(t1.cnt) AS keyword_count
