@@ -1,8 +1,8 @@
 import sqlite3
 
 
-# ********Search for sales*********
-def search_sales(cursor, keywords):
+# ********Helper Function of search for sales*********
+def helper(cursor, keywords):
     keywords = '%' + keywords + '%'
     cursor.execute('''SELECT *
                       FROM
@@ -24,4 +24,7 @@ def search_sales(cursor, keywords):
                       GROUP BY t1.sid) t2, sales
                       WHERE t2.sid = sales.sid
                       AND sales.edate > DATE('now');''', (keywords, keywords))
+
     return cursor.fetchall()
+
+# ********Search for sales********
