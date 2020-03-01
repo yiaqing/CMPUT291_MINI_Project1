@@ -4,6 +4,7 @@ import login
 import list_products
 import search_sales
 import post_sale
+import injection_detection
 
 
 # ********Initialization********
@@ -103,6 +104,8 @@ if __name__ == "__main__":
     print("-------------------------------------------------")
 
     post_sale.post_sale(conn, cursor, "ibev@gmail.com", "2020-03-31", "Test", "Test")
+
+    injection_detection.search("*")
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)
