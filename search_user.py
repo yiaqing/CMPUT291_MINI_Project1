@@ -1,6 +1,7 @@
 import sqlite3
 
 
+# Q5
 # ********Search for users********
 def search_user(cursor, keyword):
     keyword = '%' + keyword + '%'
