@@ -2,6 +2,8 @@ import sqlite3
 import re
 import datetime
 
+
+# Q4
 # ********Post a sale********
 def post_sale(conn, cursor, lister, edate, descr, cond, pid=None, rprice=None):
     cursor.execute('''SELECT MAX(sales.sid)

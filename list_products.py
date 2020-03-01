@@ -1,6 +1,7 @@
 import sqlite3
 
 
+# Q1
 # ********List qualifying products information********
 def list_products(cursor):
     cursor.execute('''SELECT products.pid, products.descr, COUNT(DISTINCT previews.rid) AS number_of_reviews, \

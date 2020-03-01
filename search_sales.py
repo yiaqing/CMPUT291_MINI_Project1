@@ -1,6 +1,7 @@
 import sqlite3
 
 
+# Q2
 # ********Helper Function of search for sales*********
 def helper(cursor, keyword):
     keyword = '%' + keyword + '%'
