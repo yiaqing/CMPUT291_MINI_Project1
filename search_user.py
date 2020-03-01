@@ -42,6 +42,7 @@ def list_active(cursor, email):
                       ORDER by sales.edate;''', (email, ))
     return cursor.fetchall()
 
+
 # ********List reviews********
 def list_reviews(cursor, email):
     cursor.execute('''SELECT reviews.reviewer, reviews.reviewee, reviews.rating, reviews.rtext, reviews.rdate
