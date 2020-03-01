@@ -4,6 +4,7 @@ import login
 import list_products
 import search_sales
 import post_sale
+import search_user
 import injection_detection
 
 
@@ -105,7 +106,31 @@ if __name__ == "__main__":
 
     post_sale.post_sale(conn, cursor, "ibev@gmail.com", "2020-03-31", "Test", "Test")
 
+    print("-------------------------------------------------")
+
+    print(search_user.search_user(cursor, 'edmonton'))
+
+    print("-------------------------------------------------")
+
+    search_user.write_review(conn, cursor, "abanner@ualberta.ca", "ibev@gmail.com", "bad", 1)
+
+    print("-------------------------------------------------")
+
+    value = search_user.list_active(cursor, "ibev@gmail.com")
+    for i in range(len(value)):
+        print(value[i])
+
+    print("-------------------------------------------------")
+
+    value = search_user.list_reviews(cursor, "ibev@gmail.com")
+    for i in range(len(value)):
+        print(value[i])
+
+    print("-------------------------------------------------")
+
     injection_detection.search("*")
+
+    print("-------------------------------------------------")
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)

@@ -14,14 +14,14 @@ def helper(cursor, keyword):
                       FROM
                       ((SELECT products.pid, COUNT(products.pid) AS cnt
                       FROM products
-                      WHERE products.descr LIKE ?
+                      WHERE products.descr LIKE ? COLLATE NOCASE
                       GROUP BY products.pid) p LEFT OUTER JOIN sales ON p.pid = sales.pid)
 
                       UNION ALL
 
                       SELECT sales.sid, COUNT(sales.sid) AS cnt
                       FROM sales
-                      WHERE sales.descr LIKE ?
+                      WHERE sales.descr LIKE ? COLLATE NOCASE
                       GROUP BY sales.sid) t1
                       GROUP BY t1.sid) t2, sales
                       WHERE t2.sid = sales.sid
@@ -51,7 +51,7 @@ def search_sales(conn, cursor, keywords_list):
 
     for i in range(len(sales)):
         cursor.execute('''INSERT INTO ptemp (sid, keyword_cnt, lister, pid, edate, descr, cond, rprice) \
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', (sales[i][0], sales[i][1], sales[i][2], sales[i][3], \
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?);''', (sales[i][0], sales[i][1], sales[i][2], sales[i][3], \
                                                            sales[i][4], sales[i][5], sales[i][6], sales[i][7]))
 
     cursor.execute('''SELECT ptemp.sid, ptemp.lister, ptemp.edate, ptemp.descr, ptemp.cond, ptemp.rprice

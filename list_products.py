@@ -58,7 +58,7 @@ def list_reviews(cursor, product_list, pid):
         print("pid out of bound")
         return 0
 
-    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?''', (pid, ))
+    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?;''', (pid, ))
     reviews = cursor.fetchall()
     for i in range(len(reviews)):
         print(reviews[i])

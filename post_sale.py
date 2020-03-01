@@ -7,7 +7,7 @@ import datetime
 # ********Post a sale********
 def post_sale(conn, cursor, lister, edate, descr, cond, pid=None, rprice=None):
     cursor.execute('''SELECT MAX(sales.sid)
-                      FROM sales''')
+                      FROM sales;''')
     sid = cursor.fetchall()[0][0]
     sid_num = str(int(sid[1:]) + 1)
     sid_char = sid[0]
@@ -38,12 +38,12 @@ def post_sale(conn, cursor, lister, edate, descr, cond, pid=None, rprice=None):
     if pid is not None:
         cursor.execute('''SELECT *
                           FROM products
-                          WHERE products.pid = ?''', (pid, ))
+                          WHERE products.pid = ?;''', (pid, ))
         if not cursor.fetchall():
             print("pid out of bounds")
             return 0
 
     cursor.execute('''INSERT INTO sales (sid, lister, pid, edate, descr, cond, rprice)
-                      VALUES (?, ?, ?, ?, ?, ?, ?)''', (sid, lister, pid, edate, descr, cond, rprice))
+                      VALUES (?, ?, ?, ?, ?, ?, ?);''', (sid, lister, pid, edate, descr, cond, rprice))
     conn.commit()
 
