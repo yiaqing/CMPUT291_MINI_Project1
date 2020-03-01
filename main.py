@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     print("-------------------------------------------------")
 
-    value = search_sales.helper(cursor, 'common')
+    value = search_sales.search_sales(conn, cursor, ['common', 'rachel'])
     for i in range(len(value)):
         print(value[i])
 
