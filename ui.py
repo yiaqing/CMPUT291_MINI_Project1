@@ -92,7 +92,7 @@ def ui_login_menu(conn, cursor):
             print("No such selection.")
 
         if user != 0:
-            print("Login as " + user)
+            print("\nLogin as " + user)
             return user
         else:
             print("Login in failed.")
