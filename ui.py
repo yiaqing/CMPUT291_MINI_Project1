@@ -245,6 +245,7 @@ def ui_list_products(conn, cursor, current_user):
         else:
             print("No such option.")
 
+
 # ********Search for sales********
 def ui_search_keywords(conn, cursor):
     print("Keywords (split by space): ", end="")
@@ -254,7 +255,6 @@ def ui_search_keywords(conn, cursor):
         return 0
 
     keywords_list = keywords_list.split()
-
 
     print("********List all sales containing keywords********")
     results = search_sales.search_sales(conn, cursor, keywords_list)
@@ -273,9 +273,9 @@ def ui_search_keywords(conn, cursor):
         print(str(results[i][4]).center(10) + "|", end="")
         print(str(results[i][5]).center(10) + "|")
 
+
 # ********Search for sales********
 def ui_search_for_sales(conn, cursor):
-
     while True:
         print("********Search for sales********")
         print("ss: Enter keywords to search sales")
