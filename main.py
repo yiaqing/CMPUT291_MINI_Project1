@@ -1,11 +1,5 @@
 import sqlite3
 import sys
-import login
-import list_products
-import search_sales
-import post_sale
-import search_user
-import injection_detection
 import ui
 
 
