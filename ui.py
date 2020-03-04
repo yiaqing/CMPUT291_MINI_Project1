@@ -253,7 +253,7 @@ def ui_main_loop(conn, cursor):
         print("********Menu********")
         print("lp: List products")
         print("ss: Search for sales")
-        print("Rachel")
+        print("rr: Rachel")
         print("ps: Post a sale")
         print("su: Search for users")
         print("ee: Exit")
