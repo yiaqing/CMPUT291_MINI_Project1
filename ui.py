@@ -10,6 +10,7 @@ def ui_user_login(cursor):
     print("********Login in********")
     print("Enter email: ", end='')
     email = input()
+    email = email.lower()
     print("Enter password: ", end='')
     password = getpass.getpass()
 
