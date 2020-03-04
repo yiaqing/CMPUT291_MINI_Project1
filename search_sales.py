@@ -26,7 +26,6 @@ def helper(cursor, keyword):
                       GROUP BY t1.sid) t2, sales
                       WHERE t2.sid = sales.sid
                       AND sales.edate > DATE('now');''', (keyword, keyword))
-
     return cursor.fetchall()
 
 
@@ -60,5 +59,18 @@ def search_sales(conn, cursor, keywords_list):
                       ORDER BY SUM(ptemp.keyword_cnt) DESC;
                     ''')
 
-    return cursor.fetchall()
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
+    reviews = cursor.fetchall()
+    results = []
+    for i in range(len(reviews)):
+        results.append(list(reviews[i]))
+    results = column_title + results
+
+    cursor.execute('''DROP TABLE ptemp;''')
+
+    conn.commit()
+
+    return results
 

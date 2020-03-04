@@ -1,6 +1,7 @@
 import list_products
 import injection_detection
 import login
+import search_sales
 import getpass
 
 
@@ -244,6 +245,49 @@ def ui_list_products(conn, cursor, current_user):
         else:
             print("No such option.")
 
+# ********Search for sales********
+def ui_search_keywords(conn, cursor):
+    print("Keywords (split by space): ", end="")
+    keywords_list = input()
+    if injection_detection.search(keywords_list):
+        print("SQL injection.")
+        return 0
+
+    keywords_list = keywords_list.split()
+
+
+    print("********List all sales containing keywords********")
+    results = search_sales.search_sales(conn, cursor, keywords_list)
+    print("|" + results[0][0].center(5) + "|", end="")
+    print(results[0][1].center(20) + "|", end="")
+    print(results[0][2].center(10) + "|", end="")
+    print(results[0][3].center(25) + "|", end="")
+    print(results[0][4].center(10) + "|", end="")
+    print(results[0][5].center(10) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(5) + "|", end="")
+        print(str(results[i][1]).center(20) + "|", end="")
+        print(str(results[i][2]).center(10) + "|", end="")
+        print(str(results[i][3]).center(25) + "|", end="")
+        print(str(results[i][4]).center(10) + "|", end="")
+        print(str(results[i][5]).center(10) + "|")
+
+# ********Search for sales********
+def ui_search_for_sales(conn, cursor):
+
+    while True:
+        print("********Search for sales********")
+        print("ss: Enter keywords to search sales")
+        print("ee: Exit")
+        selected = input()
+        if (selected == "ss") or (selected == "SS"):
+            ui_search_keywords(conn, cursor)
+
+        elif (selected == "ee") or (selected == "EE"):
+            print("Exit.")
+            return 0
+
 
 # ********Main loop********
 def ui_main_loop(conn, cursor):
@@ -263,7 +307,7 @@ def ui_main_loop(conn, cursor):
             ui_list_products(conn, cursor, current_user)
 
         elif (selected == "ss") or (selected == "SS"):
-            print("Not Finished Yet.")
+            ui_search_for_sales(conn, cursor)
 
         elif (selected == "rr") or (selected == "RR"):
             print("Not Finished Yet.")
