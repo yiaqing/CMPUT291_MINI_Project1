@@ -19,25 +19,6 @@ def disconn_db(conn, cursor):
     cursor.close()
     conn.close()
 
-# ********Menu********
-def login_menu(conn, cursor):
-    while True:
-        print("********Menu********")
-        print("l: Login in")
-        print("s: Sign up")
-        selected = input()
-        if selected == "l":
-            user = ui.user_login(cursor)
-        elif selected == "s":
-            user = ui.user_signup(conn, cursor)
-        else:
-            print("No such selection.")
-
-        if user != 0:
-            print("Login as " + user)
-            return user
-
-
 
 # ********Main********
 if __name__ == "__main__":
