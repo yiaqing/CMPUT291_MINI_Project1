@@ -1,6 +1,5 @@
 import sqlite3
 
-
 # ********Registered User Login********
 def reg_login(cursor, email, password):
     email = email.lower()
@@ -21,35 +20,6 @@ def reg_login(cursor, email, password):
 
 # ********Unregistered User Sing up********
 def sign_up(conn, cursor, email, name, pwd, city, gender):
-    email = email.lower()
-    name = name.title()
-    city = city.capitalize()
-    gender = gender.upper()
-
-    if len(email) > 20:
-        print("email out of bounds")
-        return 0
-
-    if len(name) > 16:
-        print("name out of bounds")
-        return 0
-
-    if len(pwd) > 4:
-        print("password out of bounds")
-        return 0
-
-    if len(city) > 15:
-        print("city out of bounds")
-        return 0
-
-    if len(gender) > 1:
-        print("gender out of bounds")
-        return 0
-
-    if (gender != "M") and (gender != "F"):
-        print("gender out of bounds")
-        return 0
-
     try:
         cursor.execute('INSERT INTO users (email, name, pwd, city, gender) VALUES(?, ?, ?, ?, ?);',
                        (email, name, pwd, city, gender))
