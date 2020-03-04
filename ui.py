@@ -2,7 +2,10 @@ import list_products
 import injection_detection
 import login
 import search_sales
+import post_sale
 import getpass
+import re
+import datetime
 
 
 # ********Login in********
@@ -294,6 +297,67 @@ def ui_search_for_sales(conn, cursor):
             print("No such option.")
 
 
+# ********Post a sale********
+def ui_post_a_sale(conn, cursor, current_user):
+    print("pid: ", end="")
+    pid = input()
+    if pid == "":
+        pid = None
+
+    print("rprice: ", end="")
+    rprice = input()
+    if rprice == "":
+        rprice = None
+
+    print("edate(yyyy-mm-dd): ", end="")
+    edate = input()
+    # Check if date is out of bounds
+    if re.fullmatch(r"^((?!0000)[0-9]{4}-((0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-8])|(0[13-9]|1[0-2])-(29|30)|" \
+                r"(0[13578]|1[02])-31)|([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579]" \
+                r"[26])00)-02-29)$", edate) is None:
+        print("Date Not Formatted")
+        return 0
+    today = str(datetime.date.today())
+    if today > edate:
+        print("Date out of bounds")
+        return 0
+
+    print("descr: ", end="")
+    descr = input()
+    # Check if descr out of bounds
+    if len(descr) > 25:
+        print("descr out of bounds")
+        return 0
+    if injection_detection.search(descr):
+        print("Injection.")
+        return 0
+
+    print("cond: ", end="")
+    cond = input()
+    # Check if cond out of bounds
+    if len(cond) > 10:
+        print("cond out of bounds")
+        return 0
+    if injection_detection.search(cond):
+        print("Injection.")
+        return 0
+
+    post_sale.post_sale(conn, cursor, current_user, edate, descr, cond, pid, rprice)
+
+
+# ********Post a sale********
+def ui_post_sale(conn, cursor, current_user):
+    while True:
+        print("********Post a sale********")
+        print("ps: Enter a product id, a sale end date and time, a sale description, a condition, and a reserved price")
+        print("ee: Exit")
+        selected = input()
+        if (selected == "ps") or (selected == "PS"):
+            ui_post_a_sale(conn, cursor, current_user)
+        if (selected == "ee") or (selected == "EE"):
+            return 0
+
+
 # ********Main loop********
 def ui_main_loop(conn, cursor):
     current_user = ui_login_menu(conn, cursor)
@@ -318,7 +382,7 @@ def ui_main_loop(conn, cursor):
             print("Not Finished Yet.")
 
         elif (selected == "ps") or (selected == "PS"):
-            print("Not Finished Yet.")
+            ui_post_sale(conn, cursor, current_user)
 
         elif (selected == "su") or (selected == "SU"):
             print("Not Finished Yet.")
