@@ -75,6 +75,7 @@ def ui_user_signup(conn, cursor):
 
     return user
 
+
 # ********Menu********
 def ui_login_menu(conn, cursor):
     while True:
@@ -92,6 +93,7 @@ def ui_login_menu(conn, cursor):
         if user != 0:
             print("Login as " + user)
             return user
+
 
 # ********Write products review********
 def ui_write_product_review(conn, cursor, product_list, current_user):
