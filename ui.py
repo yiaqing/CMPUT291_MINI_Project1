@@ -135,14 +135,14 @@ def ui_list_all_reviews(cursor, product_list):
     print("|"+results[0][0].center(5)+"|", end="")
     print(results[0][1].center(5) + "|", end="")
     print(results[0][2].center(19) + "|", end="")
-    print(results[0][3].center(16) + "|", end="")
+    print(results[0][3].center(10) + "|", end="")
     print(results[0][4].center(24) + "|")
 
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(5) + "|", end="")
         print(str(results[i][2]).center(19) + "|", end="")
-        print(str(results[i][3]).center(16) + "|", end="")
+        print(str(results[i][3]).center(10) + "|", end="")
         print(str(results[i][4]).center(24) + "|")
 
 
