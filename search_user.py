@@ -10,19 +10,20 @@ def search_user(cursor, keyword):
                       WHERE users.email LIKE ? COLLATE NOCASE
                       OR users.name LIKE ? COLLATE NOCASE 
                       OR users.city LIKE ? COLLATE NOCASE;''', (keyword, keyword, keyword))
-    return cursor.fetchall()
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
+    reviews = cursor.fetchall()
+    results = []
+    for i in range(len(reviews)):
+        results.append(list(reviews[i]))
+    results = column_title + results
+
+    return results
 
 
 # ********Write a review********
 def write_review(conn, cursor, reviewer, reviewee, rtext, rating):
-    # Check if rtext out of bounds
-    if len(rtext) > 20:
-        print("rtext out of bounds.")
-
-    # Check if rating out of bounds
-    if (rating > 5) or (rating < 1):
-        print("rating out of bounds.")
-
     try:
         cursor.execute('''INSERT INTO reviews (reviewer, reviewee, rating, rtext, rdate)
                           VALUES (?, ?, ?, ?, DATE('now'));''', (reviewer, reviewee, rating, rtext))
@@ -40,7 +41,17 @@ def list_active(cursor, email):
                       WHERE users.email = ?
                       AND sales.edate > DATE('now')
                       ORDER by sales.edate;''', (email, ))
-    return cursor.fetchall()
+
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
+    reviews = cursor.fetchall()
+    results = []
+    for i in range(len(reviews)):
+        results.append(list(reviews[i]))
+    results = column_title + results
+
+    return results
 
 
 # ********List reviews********
@@ -48,4 +59,14 @@ def list_reviews(cursor, email):
     cursor.execute('''SELECT reviews.reviewer, reviews.reviewee, reviews.rating, reviews.rtext, reviews.rdate
                       FROM reviews
                       WHERE reviews.reviewee = ?;''', (email, ))
-    return cursor.fetchall()
+
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
+    reviews = cursor.fetchall()
+    results = []
+    for i in range(len(reviews)):
+        results.append(list(reviews[i]))
+    results = column_title + results
+
+    return results

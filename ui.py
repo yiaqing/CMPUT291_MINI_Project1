@@ -3,9 +3,11 @@ import injection_detection
 import login
 import search_sales
 import post_sale
+import search_user
 import getpass
 import re
 import datetime
+import sqlite3
 
 
 # ********Login in********
@@ -209,7 +211,7 @@ def ui_list_all_active_sales(cursor, product_list):
         print(str(results[i][6]).center(10) + "|")
 
 
-# ********list_products********
+# ********list products menu********
 def ui_list_products(conn, cursor, current_user):
     print("********List all products with some active sales associated to them********")
     results = list_products.list_products(cursor)
@@ -279,7 +281,7 @@ def ui_search_keywords(conn, cursor):
         print(str(results[i][5]).center(10) + "|")
 
 
-# ********Search for sales********
+# ********Search for sales menu********
 def ui_search_for_sales(conn, cursor):
     while True:
         print("********Search for sales********")
@@ -313,8 +315,8 @@ def ui_post_a_sale(conn, cursor, current_user):
     edate = input()
     # Check if date is out of bounds
     if re.fullmatch(r"^((?!0000)[0-9]{4}-((0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-8])|(0[13-9]|1[0-2])-(29|30)|" \
-                r"(0[13578]|1[02])-31)|([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579]" \
-                r"[26])00)-02-29)$", edate) is None:
+                    r"(0[13578]|1[02])-31)|([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579]" \
+                    r"[26])00)-02-29)$", edate) is None:
         print("Date Not Formatted")
         return 0
     today = str(datetime.date.today())
@@ -345,7 +347,7 @@ def ui_post_a_sale(conn, cursor, current_user):
     post_sale.post_sale(conn, cursor, current_user, edate, descr, cond, pid, rprice)
 
 
-# ********Post a sale********
+# ********Post a sale menu********
 def ui_post_sale(conn, cursor, current_user):
     while True:
         print("********Post a sale********")
@@ -356,6 +358,149 @@ def ui_post_sale(conn, cursor, current_user):
             ui_post_a_sale(conn, cursor, current_user)
         if (selected == "ee") or (selected == "EE"):
             return 0
+
+
+# ********List all reviews of the user********
+def ui_list_all_reviews(cursor, user_list):
+    print("Email: ", end="")
+    email = input()
+    # Check if email out of bounds
+    flag = 1
+    for i in range(len(user_list)):
+        if email == user_list[i][0]:
+            flag = 0
+    if flag:
+        print("No such email.")
+        return 0
+
+    results = search_user.list_reviews(cursor, email)
+
+    print("|" + results[0][0].center(30) + "|", end="")
+    print(results[0][1].center(15) + "|", end="")
+    print(results[0][2].center(10) + "|", end="")
+    print(results[0][3].center(15) + "|", end="")
+    print(results[0][4].center(10) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(30) + "|", end="")
+        print(str(results[i][1]).center(15) + "|", end="")
+        print(str(results[i][2]).center(10) + "|", end="")
+        print(str(results[i][3]).center(15) + "|", end="")
+        print(str(results[i][4]).center(10) + "|")
+
+
+# ********List all active listings of the user********
+def ui_list_all_active_users(cursor, user_list):
+    print("Email: ", end="")
+    email = input()
+    # Check if email out of bounds
+    flag = 1
+    for i in range(len(user_list)):
+        if email == user_list[i][0]:
+            flag = 0
+    if flag:
+        print("No such email.")
+        return 0
+
+    results = search_user.list_active(cursor, email)
+
+    print("|" + results[0][0].center(5) + "|", end="")
+    print(results[0][1].center(20) + "|", end="")
+    print(results[0][2].center(10) + "|", end="")
+    print(results[0][3].center(15) + "|", end="")
+    print(results[0][4].center(20) + "|", end="")
+    print(results[0][5].center(10) + "|", end="")
+    print(results[0][6].center(10) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(5) + "|", end="")
+        print(str(results[i][1]).center(20) + "|", end="")
+        print(str(results[i][2]).center(10) + "|", end="")
+        print(str(results[i][3]).center(15) + "|", end="")
+        print(str(results[i][4]).center(20) + "|", end="")
+        print(str(results[i][5]).center(10) + "|", end="")
+        print(str(results[i][6]).center(10) + "|")
+
+
+# ********ui_write_review********
+def ui_write_user_review(conn, cursor, user_list, reviewer):
+    print("Reviewee email: ", end="")
+    email = input()
+    print("Rtext: ", end="")
+    rtext = input()
+    print("rating: ", end="")
+    rating = input()
+    rating = float(rating)
+
+    # Check if email out of bounds
+    flag = 1
+    for i in range(len(user_list)):
+        if email == user_list[i][0]:
+            flag = 0
+    if flag:
+        print("No such email.")
+        return 0
+
+    # Check if rtext out of bounds
+    if len(rtext) > 20:
+        print("rtext out of bounds.")
+    if injection_detection.search(rtext):
+        print("Injection.")
+        return 0
+
+    # Check if rating out of bounds
+    if (rating > 5) or (rating < 1):
+        print("rating out of bounds.")
+
+    # Check if the user review him or her self
+    if reviewer == email:
+        print("No self review.")
+        return 0
+
+    search_user.write_review(conn, cursor, reviewer, email, rtext, rating)
+
+
+# ********Search for users menu********
+def ui_search_for_users(conn, cursor, current_user):
+    print("Enter keyword to search for users: ", end="")
+    keyword = input()
+    if injection_detection.search(keyword):
+        print("SQL injection.")
+        return 0
+
+    print("********List all users containing keywords********")
+    results = search_user.search_user(cursor, keyword)
+    print("|" + results[0][0].center(20) + "|", end="")
+    print(results[0][1].center(15) + "|", end="")
+    print(results[0][2].center(10) + "|", end="")
+    print(results[0][3].center(15) + "|", end="")
+    print(results[0][4].center(6) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(20) + "|", end="")
+        print(str(results[i][1]).center(15) + "|", end="")
+        print(str(results[i][2]).center(10) + "|", end="")
+        print(str(results[i][3]).center(15) + "|", end="")
+        print(str(results[i][4]).center(6) + "|")
+
+    while True:
+        print("********Menu********")
+        print("wr: Write a review")
+        print("ll: List all active listing of the users")
+        print("lr: List all reviews of the user")
+        print("ee: Exit")
+
+        selected = input()
+        if (selected == "wr") or (selected == "WR"):
+            ui_write_user_review(conn, cursor, results, current_user)
+        elif (selected == "ll") or (selected == "LL"):
+            ui_list_all_active_users(cursor, results)
+        elif (selected == "lr") or (selected == "LR"):
+            ui_list_all_reviews(cursor, results)
+        elif (selected == "ee") or (selected == "EE"):
+            return 0
+        else:
+            print("No such option.")
 
 
 # ********Main loop********
@@ -385,8 +530,17 @@ def ui_main_loop(conn, cursor):
             ui_post_sale(conn, cursor, current_user)
 
         elif (selected == "su") or (selected == "SU"):
-            print("Not Finished Yet.")
+            ui_search_for_users(conn, cursor, current_user)
 
         elif (selected == "ee") or (selected == "EE"):
             print("Exit")
             return 0
+
+
+'''
+Test area
+if __name__ == "__main__":
+    conn = sqlite3.connect("db.db")
+    cursor = conn.cursor()
+    ui_search_for_users(conn, cursor, "rachel@gmail.com")
+'''
