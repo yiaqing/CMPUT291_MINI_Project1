@@ -265,6 +265,15 @@ def ui_main_loop(conn, cursor):
         elif (selected == "ss") or (selected == "SS"):
             print("Not Finished Yet.")
 
+        elif (selected == "rr") or (selected == "RR"):
+            print("Not Finished Yet.")
+
+        elif (selected == "ps") or (selected == "PS"):
+            print("Not Finished Yet.")
+
+        elif (selected == "su") or (selected == "SU"):
+            print("Not Finished Yet.")
+
         elif (selected == "ee") or (selected == "EE"):
             print("Exit")
             return 0
