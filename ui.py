@@ -10,7 +10,7 @@ def ui_user_login(cursor):
     print("Enter email: ", end='')
     email = input()
     print("Enter password: ", end='')
-    password = input()
+    password = getpass.getpass()
 
     # Check SQL Injection
     if (injection_detection.email_check(email) is not None) and (injection_detection.name_check(password) is not None):
@@ -79,6 +79,7 @@ def ui_user_signup(conn, cursor):
 # ********Menu********
 def ui_login_menu(conn, cursor):
     while True:
+        user = 0
         print("********Menu********")
         print("l: Login in")
         print("s: Sign up")
@@ -93,6 +94,8 @@ def ui_login_menu(conn, cursor):
         if user != 0:
             print("Login as " + user)
             return user
+        else:
+            print("Login in failed.")
 
 
 # ********Write products review********
@@ -218,13 +221,13 @@ def ui_list_products(conn, cursor, current_user):
         print(str(results[i][3]).center(16) + "|", end="")
         print(str(results[i][4]).center(24) + "|")
 
-    print("\n********Menu********")
-    print("w: Write a product review by providing a review text and a rating (a number between 1 and 5 inclusive")
-    print("r: List all reviews of the product.")
-    print("s: List all active sales associated to the product")
-    print("e: exit")
-
     while True:
+        print("\n********Menu********")
+        print("w: Write a product review by providing a review text and a rating (a number between 1 and 5 inclusive")
+        print("r: List all reviews of the product.")
+        print("s: List all active sales associated to the product")
+        print("e: exit")
+
         selected = input()
         if (selected == "W") or (selected == "w"):
             ui_write_product_review(conn, cursor, results, current_user)
@@ -240,3 +243,28 @@ def ui_list_products(conn, cursor, current_user):
 
         else:
             print("No such option.")
+
+
+# ********Main loop********
+def ui_main_loop(conn, cursor):
+    current_user = ui_login_menu(conn, cursor)
+
+    while True:
+        print("********Menu********")
+        print("lp: List products")
+        print("ss: Search for sales")
+        print("Rachel")
+        print("ps: Post a sale")
+        print("su: Search for users")
+        print("ee: Exit")
+
+        selected = input()
+        if (selected == "lp") or (selected == "LP"):
+            ui_list_products(conn, cursor, current_user)
+
+        elif (selected == "ss") or (selected == "SS"):
+            print("Not Finished Yet.")
+
+        elif (selected == "ee") or (selected == "EE"):
+            print("Exit")
+            return 0

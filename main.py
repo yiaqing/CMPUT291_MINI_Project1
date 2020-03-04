@@ -7,7 +7,9 @@ import post_sale
 import search_user
 import injection_detection
 import ui
-#zqq
+
+
+# zqq
 # ********Initialization********
 def conn_db():
     conn = sqlite3.connect(sys.argv[1])
@@ -26,7 +28,7 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     cursor.execute('''PRAGMA foreign_keys = ON;''')
 
-    ui.ui_list_products(conn, cursor, "ibev@gmail.com")
+    ui.ui_main_loop(conn, cursor)
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)
