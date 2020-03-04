@@ -52,17 +52,7 @@ def list_reviews(cursor, pid):
 
 
 # *********List all associative active sales********
-def list_sales(cursor, product_list, pid):
-    pid = pid.upper()
-
-    # Check if pid out of bounds
-    pids = []
-    for i in range(len(product_list)):
-        pids.append(product_list[i][0])
-    if pid not in pids:
-        print("pid out of bound")
-        return 0
-
+def list_sales(cursor, pid):
     cursor.execute('''SELECT sales.sid AS sid, sales.lister AS lister, \
                       sales.pid AS pid, sales.edate AS edate, sales.descr AS descr, \
                       sales.cond AS cond, sales.rprice AS rprice \
@@ -71,4 +61,13 @@ def list_sales(cursor, product_list, pid):
                       AND sales.edate > DATE('now')
                       ORDER BY sales.edate ASC;''', (pid,))
 
-    return cursor.fetchall()
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
+    reviews = cursor.fetchall()
+    results = []
+    for i in range(len(reviews)):
+        results.append(list(reviews[i]))
+    results = column_title + results
+
+    return results
