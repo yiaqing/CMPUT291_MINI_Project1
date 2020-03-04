@@ -251,6 +251,7 @@ def ui_list_products(conn, cursor, current_user):
 def ui_search_keywords(conn, cursor):
     print("Keywords (split by space): ", end="")
     keywords_list = input()
+    keywords_list = keywords_list.lower()
     if injection_detection.search(keywords_list):
         print("SQL injection.")
         return 0
@@ -288,6 +289,9 @@ def ui_search_for_sales(conn, cursor):
         elif (selected == "ee") or (selected == "EE"):
             print("Exit.")
             return 0
+
+        else:
+            print("No such option.")
 
 
 # ********Main loop********
