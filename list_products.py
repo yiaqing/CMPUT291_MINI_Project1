@@ -24,30 +24,8 @@ def list_products(cursor):
     return results
 
 
-
 # ********Write product review********
-def write_preview(conn, cursor, product_list, pid, reviewer, rating, rtext):
-    pid = pid.upper()
-    reviewer = reviewer.lower()
-
-    # Check if rating out of bounds
-    if (float(rating) > 5) or (float(rating) < 0):
-        print("rating out of bounds.")
-        return 0
-
-    # Check if pid out of bounds
-    pids = []
-    for i in range(len(product_list)):
-        pids.append(product_list[i][0])
-    if pid not in pids:
-        print("pid out of bound")
-        return 0
-
-    # Check if rtext out of bounds
-    if len(rtext) > 20:
-        print("rtext out of bounds")
-        return 0
-
+def write_preview(conn, cursor, pid, reviewer, rating, rtext):
     # Get next unique rid
     cursor.execute('''SELECT MAX(rid) FROM previews;''')
     rid = cursor.fetchall()[0][0] + 1
@@ -58,21 +36,19 @@ def write_preview(conn, cursor, product_list, pid, reviewer, rating, rtext):
 
 
 # ********List reviews of product********
-def list_reviews(cursor, product_list, pid):
-    pid = pid.upper()
-
-    # Check if pid out of bounds
-    pids = []
-    for i in range(len(product_list)):
-        pids.append(product_list[i][0])
-    if pid not in pids:
-        print("pid out of bound")
-        return 0
-
-    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?;''', (pid, ))
+def list_reviews(cursor, pid):
+    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?;''', (pid,))
+    column_title = [[]]
+    for i in range(len(cursor.description)):
+        column_title[0].append(cursor.description[i][0])
     reviews = cursor.fetchall()
+    results = []
     for i in range(len(reviews)):
-        print(reviews[i])
+        results.append(list(reviews[i]))
+
+    results = column_title + results
+
+    return results
 
 
 # *********List all associative active sales********
@@ -93,7 +69,6 @@ def list_sales(cursor, product_list, pid):
                       FROM sales
                       WHERE sales.pid = ?
                       AND sales.edate > DATE('now')
-                      ORDER BY sales.edate ASC;''', (pid, ))
+                      ORDER BY sales.edate ASC;''', (pid,))
 
     return cursor.fetchall()
-

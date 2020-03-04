@@ -76,8 +76,80 @@ def ui_user_signup(conn, cursor):
     return user
 
 
+# ********Write products review********
+def ui_write_product_review(conn, cursor, product_list, current_user):
+    print("********Write product review********")
+    print("pid: ", end="")
+    pid = input()
+    print("rating: ", end="")
+    rating = input()
+    print("rtext: ", end="")
+    rtext = input()
+    pid = pid.upper()
+
+    reviewer = current_user.lower()
+
+    # Check if rating out of bounds
+    if (float(rating) > 5) or (float(rating) < 0):
+        print("rating out of bounds.")
+        return 0
+
+    # Check if pid out of bounds
+    pids = []
+    for i in range(1, len(product_list)):
+        pids.append(product_list[i][0])
+    if pid not in pids:
+        print("pid out of bound")
+        return 0
+
+    # Check if rtext out of bounds
+    if injection_detection.search(rtext):
+        print("Injection.")
+        return 0
+
+    if len(rtext) > 20:
+        print("rtext out of bounds")
+        return 0
+
+    list_products.write_preview(conn, cursor, pid, reviewer, rating, rtext)
+
+
+# ********List all reviews of the product********
+def ui_list_all_reviews(cursor, product_list):
+    print("pid: ", end="")
+    pid = input()
+
+    pid = pid.upper()
+
+    # Check if pid out of bounds
+    pids = []
+    for i in range(1, len(product_list)):
+        pids.append(product_list[i][0])
+    if pid not in pids:
+        print("pid out of bound")
+        return 0
+
+    print("********List all reviews of the product********")
+    results = list_products.list_reviews(cursor, pid)
+
+    print("|"+results[0][0].center(5)+"|", end="")
+    print(results[0][1].center(5) + "|", end="")
+    print(results[0][2].center(19) + "|", end="")
+    print(results[0][3].center(16) + "|", end="")
+    print(results[0][4].center(24) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(5) + "|", end="")
+        print(str(results[i][1]).center(5) + "|", end="")
+        print(str(results[i][2]).center(19) + "|", end="")
+        print(str(results[i][3]).center(16) + "|", end="")
+        print(str(results[i][4]).center(24) + "|")
+
+
+
 # ********list_products********
-def ui_list_products(cursor):
+def ui_list_products(conn, cursor, current_user):
+    print("********List all products with some active sales associated to them********")
     results = list_products.list_products(cursor)
     print("|"+results[0][0].center(5)+"|", end="")
     print(results[0][1].center(30) + "|", end="")
@@ -92,6 +164,17 @@ def ui_list_products(cursor):
         print(str(results[i][3]).center(16) + "|", end="")
         print(str(results[i][4]).center(24) + "|")
 
+    print("\n********Menu********")
+    print("w: Write a product review by providing a review text and a rating (a number between 1 and 5 inclusive")
+    print("r: List all reviews of the product.")
+    print("s: List all active sales associated to the product")
 
-# ********
+    selected = input()
+    if (selected == "W") or (selected == "w"):
+        ui_write_product_review(conn, cursor, results, current_user)
+
+    elif (selected == "R") or (selected == "r"):
+        ui_list_all_reviews(cursor, results)
+
+
 

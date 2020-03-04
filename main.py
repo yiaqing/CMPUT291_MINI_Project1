@@ -45,7 +45,7 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     cursor.execute('''PRAGMA foreign_keys = ON;''')
 
-    ui.ui_list_products(cursor)
+    ui.ui_list_products(conn, cursor, "ibev@gmail.com")
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)
