@@ -14,7 +14,7 @@ def email_check(content):
     return re.fullmatch(r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$', content)
 
 
-# ********General Chcek********
+# ********General Check********
 def search(string):
     if re.search(r"\b(and|exec|insert|select|drop|grant|alter|delete"
                  r"|update|count|chr|mid|master|truncate|char|declare|or)\b|(\*|;|\+|'|%)", string) is not None:
