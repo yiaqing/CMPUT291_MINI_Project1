@@ -144,7 +144,7 @@ def ui_write_product_review(conn, cursor, product_list, current_user):
 
 
 # ********List all reviews of the product********
-def ui_list_all_reviews(cursor, product_list):
+def ui_list_all_product_reviews(cursor, product_list):
     print("pid: ", end="")
     pid = input()
 
@@ -240,7 +240,7 @@ def ui_list_products(conn, cursor, current_user):
             ui_write_product_review(conn, cursor, results, current_user)
 
         elif (selected == "R") or (selected == "r"):
-            ui_list_all_reviews(cursor, results)
+            ui_list_all_product_reviews(cursor, results)
 
         elif (selected == "S") or (selected == "s"):
             ui_list_all_active_sales(cursor, results)
