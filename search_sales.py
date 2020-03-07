@@ -61,9 +61,9 @@ def search_sales(conn, cursor, keywords_list):
 
     cursor.execute('''SELECT    ptemp.sid, ptemp.descr,
                                 case bids.amount
-                                    WHEN not null
-                                        then max(bids.amount)
-                                    ELSE ptemp.rprice
+                                    WHEN null
+                                        then ptemp.rprice
+                                    ELSE max(bids.amount)
                                 END status,
                                 CAST((strftime('%s', ptemp.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
                                 CAST(((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
