@@ -88,7 +88,7 @@ def search_sales(conn, cursor, keywords_list):
 
     return results
 
-# zqq
+
 if __name__ == "__main__":
     conn = sqlite3.connect("db.db")
     cursor = conn.cursor()
