@@ -50,14 +50,28 @@ def search_sales(conn, cursor, keywords_list):
 
     for i in range(len(sales)):
         cursor.execute('''INSERT INTO ptemp (sid, keyword_cnt, lister, pid, edate, descr, cond, rprice) \
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?);''', (sales[i][0], sales[i][1], sales[i][2], sales[i][3], \
-                                                           sales[i][4], sales[i][5], sales[i][6], sales[i][7]))
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?);''', [sales[i][0], sales[i][1], sales[i][2], sales[i][3], \
+                                                                sales[i][4], sales[i][5], sales[i][6], sales[i][7],])
 
-    cursor.execute('''SELECT ptemp.sid, ptemp.lister, ptemp.edate, ptemp.descr, ptemp.cond, ptemp.rprice
-                      FROM ptemp
-                      GROUP BY ptemp.sid
-                      ORDER BY SUM(ptemp.keyword_cnt) DESC;
-                    ''')
+    # cursor.execute('''SELECT ptemp.sid, ptemp.lister, ptemp.edate, ptemp.descr, ptemp.cond, ptemp.rprice
+    #                   FROM ptemp
+    #                   GROUP BY ptemp.sid
+    #                   ORDER BY SUM(ptemp.keyword_cnt) DESC;
+    #                 ''')
+
+    cursor.execute('''SELECT    ptemp.sid, ptemp.descr,
+                                case bids.amount
+                                    WHEN not null
+                                        then max(bids.amount)
+                                    ELSE ptemp.rprice
+                                END status,
+                                CAST((strftime('%s', ptemp.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
+                                CAST(((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
+                                CAST((((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time
+                        FROM ptemp LEFT OUTER JOIN bids ON ptemp.sid = bids.sid
+                        GROUP BY ptemp.sid
+                        ORDER BY SUM(ptemp.keyword_cnt) DESC;
+                        ''')
 
     column_title = [[]]
     for i in range(len(cursor.description)):
@@ -74,3 +88,19 @@ def search_sales(conn, cursor, keywords_list):
 
     return results
 
+
+if __name__ == "__main__":
+    conn = sqlite3.connect("db.db")
+    cursor = conn.cursor()
+    print("********List all sales containing keywords********")
+    results = search_sales(conn, cursor, 'common')
+    print("|" + results[0][0].center(5) + "|", end="")
+    print(results[0][1].center(40) + "|", end="")
+    print(results[0][2].center(19) + "|", end="")
+    print(results[0][3].center(16) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(5) + "|", end="")
+        print(str(results[i][1]).center(40) + "|", end="")
+        print(str(results[i][2]).center(19) + "|", end="")
+        print(str(results[i][3]).center(16) + "|")

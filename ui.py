@@ -194,21 +194,32 @@ def ui_list_all_active_sales(cursor, product_list):
 
     print("********List all active sales associated to the product********")
     print("|" + results[0][0].center(5) + "|", end="")
-    print(results[0][1].center(20) + "|", end="")
-    print(results[0][2].center(5) + "|", end="")
-    print(results[0][3].center(10) + "|", end="")
-    print(results[0][4].center(25) + "|", end="")
-    print(results[0][5].center(16) + "|", end="")
-    print(results[0][6].center(10) + "|")
+    print(results[0][1].center(40) + "|", end="")
+    print(results[0][2].center(19) + "|", end="")
+    print(results[0][3].center(16) + "|")
 
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
-        print(str(results[i][1]).center(20) + "|", end="")
-        print(str(results[i][2]).center(5) + "|", end="")
-        print(str(results[i][3]).center(10) + "|", end="")
-        print(str(results[i][4]).center(25) + "|", end="")
-        print(str(results[i][5]).center(16) + "|", end="")
-        print(str(results[i][6]).center(10) + "|")
+        print(str(results[i][1]).center(40) + "|", end="")
+        print(str(results[i][2]).center(19) + "|", end="")
+        print(str(results[i][3]).center(16) + "|")
+
+    # print("|" + results[0][0].center(5) + "|", end="")
+    # print(results[0][1].center(20) + "|", end="")
+    # print(results[0][2].center(5) + "|", end="")
+    # print(results[0][3].center(10) + "|", end="")
+    # print(results[0][4].center(25) + "|", end="")
+    # print(results[0][5].center(16) + "|", end="")
+    # print(results[0][6].center(10) + "|")
+    #
+    # for i in range(1, len(results)):
+    #     print("|" + str(results[i][0]).center(5) + "|", end="")
+    #     print(str(results[i][1]).center(20) + "|", end="")
+    #     print(str(results[i][2]).center(5) + "|", end="")
+    #     print(str(results[i][3]).center(10) + "|", end="")
+    #     print(str(results[i][4]).center(25) + "|", end="")
+    #     print(str(results[i][5]).center(16) + "|", end="")
+    #     print(str(results[i][6]).center(10) + "|")
 
 
 # ********list products menu********
