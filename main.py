@@ -1,6 +1,6 @@
 import sqlite3
 import sys
-import ui
+import ui_zqq
 
 
 # zqq
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     cursor = conn.cursor()
     cursor.execute('''PRAGMA foreign_keys = ON;''')
 
-    ui.ui_main_loop(conn, cursor)
+    ui_zqq.ui_main_loop(conn, cursor)
 
     # ********Disconnect Database********
     disconn_db(conn, cursor)
