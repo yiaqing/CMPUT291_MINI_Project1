@@ -137,7 +137,7 @@ def ui_write_product_review(conn, cursor, product_list, current_user):
         print("Injection.")
         return 0
 
-    if len(rtext) > 20:
+    if len(rtext) > 100:
         print("rtext out of bounds")
         return 0
 
