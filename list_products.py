@@ -88,8 +88,7 @@ def list_sales(cursor, pid):
 
     return results
 
-'''
-test
+
 if __name__ == "__main__":
     conn = sqlite3.connect("db.db")
     cursor = conn.cursor()
@@ -105,4 +104,3 @@ if __name__ == "__main__":
         print(str(results[i][1]).center(30) + "|", end="")
         print(str(results[i][2]).center(19) + "|", end="")
         print(str(results[i][3]).center(16) + "|")
-'''

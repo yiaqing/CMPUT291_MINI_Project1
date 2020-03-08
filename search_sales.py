@@ -88,21 +88,3 @@ def search_sales(conn, cursor, keywords_list):
 
     return results
 
-'''
-test
-if __name__ == "__main__":
-    conn = sqlite3.connect("db.db")
-    cursor = conn.cursor()
-    print("********List all sales containing keywords********")
-    results = search_sales(conn, cursor, 'common')
-    print("|" + results[0][0].center(5) + "|", end="")
-    print(results[0][1].center(40) + "|", end="")
-    print(results[0][2].center(19) + "|", end="")
-    print(results[0][3].center(16) + "|")
-
-    for i in range(1, len(results)):
-        print("|" + str(results[i][0]).center(5) + "|", end="")
-        print(str(results[i][1]).center(40) + "|", end="")
-        print(str(results[i][2]).center(19) + "|", end="")
-        print(str(results[i][3]).center(16) + "|")
-'''

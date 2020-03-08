@@ -279,17 +279,13 @@ def ui_search_keywords(conn, cursor):
     print("|" + results[0][0].center(5) + "|", end="")
     print(results[0][1].center(20) + "|", end="")
     print(results[0][2].center(10) + "|", end="")
-    print(results[0][3].center(25) + "|", end="")
-    print(results[0][4].center(10) + "|", end="")
-    print(results[0][5].center(10) + "|")
+    print(results[0][3].center(10) + "|")
 
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(20) + "|", end="")
         print(str(results[i][2]).center(10) + "|", end="")
-        print(str(results[i][3]).center(25) + "|", end="")
-        print(str(results[i][4]).center(10) + "|", end="")
-        print(str(results[i][5]).center(10) + "|")
+        print(str(results[i][3]).center(10) + "|")
 
 
 # ********Search for sales menu********
