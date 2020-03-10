@@ -64,11 +64,10 @@ def list_sales(cursor, pid):
     #                   ORDER BY sales.edate ASC;''', (pid,))
     cursor.execute('''SELECT    sales.sid, 
                                 sales.descr, 
-                                case bids.amount
-                                    WHEN null 
+                                case WHEN  bids.amount is null
                                         then sales.rprice
                                     ELSE max(bids.amount)
-                                END status, 
+                                END status,
                                 CAST((strftime('%s', sales.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
                                 CAST(((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
                                 CAST((((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time 
