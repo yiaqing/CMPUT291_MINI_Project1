@@ -59,11 +59,7 @@ def search_sales(conn, cursor, keywords_list):
     #                   ORDER BY SUM(ptemp.keyword_cnt) DESC;
     #                 ''')
 
-    cursor.execute('''SELECT    ptemp.sid, ptemp.descr,
-                                case WHEN  bids.amount is null
-                                        then sales.rprice
-                                    ELSE max(bids.amount)
-                                END status,
+    cursor.execute('''SELECT    ptemp.sid, ptemp.descr, IFNULL(max(bids.amount), ptemp.rprice) AS min_bid,
                                 CAST((strftime('%s', ptemp.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
                                 CAST(((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
                                 CAST((((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time
