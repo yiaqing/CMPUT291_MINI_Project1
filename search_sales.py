@@ -25,7 +25,7 @@ def helper(cursor, keyword):
                       GROUP BY sales.sid) t1
                       GROUP BY t1.sid) t2, sales
                       WHERE t2.sid = sales.sid
-                      AND sales.edate > DATE('now');''', (keyword, keyword))
+                      AND sales.edate > DATE('now', 'localtime');''', (keyword, keyword))
     return cursor.fetchall()
 
 
