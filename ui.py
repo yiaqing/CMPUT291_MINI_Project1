@@ -137,7 +137,7 @@ def ui_write_product_review(conn, cursor, product_list, current_user):
         print("Injection.")
         return 0
 
-    if len(rtext) > 100:
+    if len(rtext) > 20:
         print("rtext out of bounds")
         return 0
 
@@ -203,6 +203,7 @@ def ui_list_all_active_sales(conn, cursor, product_list, current_user):
         print(str(results[i][2]).center(19) + "|", end="")
         print(str(results[i][3]).center(16) + "|")
     ui_follow_up(conn, cursor, results, current_user)
+    return 0
 
 
 def ui_follow_up(conn, cursor, results, current_user):
@@ -224,15 +225,18 @@ def ui_follow_up(conn, cursor, results, current_user):
                 selected2 = input().lower()
                 if selected2 == 'pb':
                     follow_up.place_bid(conn, cursor, selection, current_user)
+                    return 0
                 if selected2 == 'ls':
                     follow_up.list_sales(cursor)
+                    return 0
                 if selected2 == 'lr':
                     follow_up.list_reviews(cursor, selection)
+                    return 0
                 if selected2 == 'ee':
-                    exit()
+                    return 0
 
         if selected == 'ee':
-            exit()
+            return 0
 
 
 # ********list products menu********
@@ -262,12 +266,15 @@ def ui_list_products(conn, cursor, current_user):
         selected = input()
         if (selected == "W") or (selected == "w"):
             ui_write_product_review(conn, cursor, results, current_user)
+            return 0
 
         elif (selected == "R") or (selected == "r"):
             ui_list_all_product_reviews(cursor, results)
+            return 0
 
         elif (selected == "S") or (selected == "s"):
             ui_list_all_active_sales(conn, cursor, results, current_user)
+            return 0
 
         elif (selected == "E") or (selected == "e"):
             return 0
@@ -316,6 +323,7 @@ def ui_search_for_sales(conn, cursor, current_user):
         selected = input()
         if (selected == "ss") or (selected == "SS"):
             ui_search_keywords(conn, cursor, current_user)
+            return 0
 
         elif (selected == "ee") or (selected == "EE"):
             print("Exit.")
@@ -383,7 +391,7 @@ def ui_post_sale(conn, cursor, current_user):
         if (selected == "ps") or (selected == "PS"):
             ui_post_a_sale(conn, cursor, current_user)
         if (selected == "ee") or (selected == "EE"):
-            return 0
+            return 1
 
 
 # ********List all reviews of the user********

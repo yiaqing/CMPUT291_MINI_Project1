@@ -33,22 +33,22 @@ def display_information(cursor, selection):
     for i in range(len(reviews)):
         results.append(list(reviews[i]))
     results = column_title + results
-    print("|" + results[0][0].center(5) + "|", end="")
-    print(results[0][1].center(5) + "|", end="")
-    print(results[0][2].center(5) + "|", end="")
-    print(results[0][3].center(40) + "|", end="")
-    print(results[0][4].center(10) + "|", end="")
-    print(results[0][5].center(16) + "|", end="")
-    print(results[0][6].center(5) + "|")
+    print("|" + results[0][0].center(25) + "|", end="")
+    print(results[0][1].center(20) + "|", end="")
+    print(results[0][2].center(15) + "|", end="")
+    print(results[0][3].center(25) + "|", end="")
+    print(results[0][4].center(20) + "|", end="")
+    print(results[0][5].center(10) + "|", end="")
+    print(results[0][6].center(10) + "|")
 
     for i in range(1, len(results)):
-        print("|" + str(results[i][0]).center(5) + "|", end="")
-        print(str(results[i][1]).center(5) + "|", end="")
-        print(str(results[i][2]).center(5) + "|", end="")
-        print(str(results[i][3]).center(40) + "|", end="")
-        print(str(results[i][4]).center(10) + "|", end="")
-        print(str(results[i][5]).center(16) + "|", end="")
-        print(str(results[i][6]).center(5) + "|")
+        print("|" + str(results[i][0]).center(25) + "|", end="")
+        print(str(results[i][1]).center(20) + "|", end="")
+        print(str(results[i][2]).center(15) + "|", end="")
+        print(str(results[i][3]).center(25) + "|", end="")
+        print(str(results[i][4]).center(20) + "|", end="")
+        print(str(results[i][5]).center(10) + "|", end="")
+        print(str(results[i][6]).center(10) + "|")
 
 
 def place_bid(conn, cursor, selection, current_user):
@@ -62,12 +62,14 @@ def place_bid(conn, cursor, selection, current_user):
                     WHERE sales.sid = ?
                     GROUP BY sales.sid;''', (selection,))
     reviews = cursor.fetchall()
+    print(reviews)
     max_bids = reviews[0][0]
-    print(max_bids)
+    if max_bids is None:
+        max_bids = 0
     # check whether amount inputted is greater than the max amount
-    bids_amount = int(input())
+    bids_amount = int(input("Bid amount: "))
     while max_bids > bids_amount:
-        bids_amount = int(input())
+        bids_amount = int(input("Re-enter bid amount (amount too low): "))
     # find unique bid for next insertion
     x = uuid.uuid4()
     cursor.execute('''INSERT INTO bids (bid, bidder, sid, bdate, amount) \
@@ -107,7 +109,15 @@ def list_sales(cursor):
         results.append(list(reviews[i]))
     results = column_title + results
 
-    return results
+    print("|" + results[0][0].center(5) + "|", end="")
+    print(results[0][1].center(30) + "|", end="")
+    print(results[0][2].center(10) + "|")
+
+    for i in range(1, len(results)):
+        print("|" + str(results[i][0]).center(5) + "|", end="")
+        print(str(results[i][1]).center(30) + "|", end="")
+        print(str(results[i][2]).center(10) + "|")
+
 
 
 def list_reviews(cursor, selection):
@@ -124,15 +134,7 @@ def list_reviews(cursor, selection):
         results.append(list(reviews[i]))
     results = column_title + results
 
-    return results
+    print("|" + results[0][0].center(25) + "|")
 
-
-if __name__ == "__main__":
-    conn = sqlite3.connect("db.db")
-    cursor = conn.cursor()
-    # display_information(cursor, 'S01')
-    # place_bid(conn, cursor, 'S01', 'qianqiu@ualberta.ca')
-    results = list_reviews(cursor, 'S02')
-    print("|" + results[0][0].center(40) + "|")
     for i in range(1, len(results)):
-        print("|" + str(results[i][0]).center(40) + "|")
+        print("|" + str(results[i][0]).center(25) + "|")
