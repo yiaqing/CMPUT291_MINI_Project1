@@ -390,8 +390,9 @@ def ui_post_sale(conn, cursor, current_user):
         selected = input()
         if (selected == "ps") or (selected == "PS"):
             ui_post_a_sale(conn, cursor, current_user)
+            return 0
         if (selected == "ee") or (selected == "EE"):
-            return 1
+            return 0
 
 
 # ********List all reviews of the user********
@@ -540,7 +541,6 @@ def ui_search_for_users(conn, cursor, current_user):
 # ********Main loop********
 def ui_main_loop(conn, cursor):
     current_user = ui_login_menu(conn, cursor)
-    # current_user = 'ibev@gmail.com'
     while True:
         print("********Menu********")
         print("lp: List products")
