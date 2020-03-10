@@ -63,10 +63,10 @@ def search_sales(conn, cursor, keywords_list):
                                 CAST((strftime('%s', ptemp.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
                                 CAST(((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
                                 CAST((((strftime('%s', ptemp.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time
-                        FROM ptemp LEFT OUTER JOIN bids ON ptemp.sid = bids.sid
-                        GROUP BY ptemp.sid
-                        ORDER BY SUM(ptemp.keyword_cnt) DESC;
-                        ''')
+                                FROM ptemp LEFT OUTER JOIN bids ON ptemp.sid = bids.sid
+                                GROUP BY ptemp.sid
+                                ORDER BY SUM(ptemp.keyword_cnt) DESC;
+                   ''')
 
     column_title = [[]]
     for i in range(len(cursor.description)):
