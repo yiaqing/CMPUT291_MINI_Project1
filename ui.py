@@ -229,6 +229,7 @@ def ui_follow_up(conn, cursor, results, current_user):
         print("ee: EXIT")
 
         # Set selection to case insensitive
+
         selected = input().lower()
         if selected == 'sd':
             selection = follow_up.display_all_sales(results)
@@ -284,10 +285,13 @@ def ui_follow_up(conn, cursor, results, current_user):
                 if selected2 == 'ee':
                     return 0
 
-        if (selected == 'ee') or (selected == 'EE'):
+        elif (selected == 'ee') or (selected == 'EE'):
             return 0
 
-        return 0
+        else:
+            print("No Such Option.")
+
+    return 0
 
 
 # ********list products menu********
