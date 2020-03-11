@@ -587,7 +587,7 @@ def ui_main_loop(conn, cursor):
 # '''
 # Test area
 # if __name__ == "__main__":
-#     conn = sqlite3.connect("db_original.db")
+#     conn = sqlite3.connect("db.db")
 #     cursor = conn.cursor()
 #     # ui_main_loop(conn, cursor)
 #     # ui_search_for_users(conn, cursor, "rachel@gmail.com")
