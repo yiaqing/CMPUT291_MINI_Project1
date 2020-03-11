@@ -242,11 +242,7 @@ def ui_follow_up(conn, cursor, results, current_user):
                 print("ee: EXIT")
                 selected2 = input().lower()
                 if selected2 == 'pb':
-                    try:
-                        follow_up.place_bid(conn, cursor, selection, current_user)
-                    except:
-                        print("Cannot bid")
-                        return 0
+                    follow_up.place_bid(conn, cursor, selection, current_user)
                     return 0
 
                 if selected2 == 'ls':

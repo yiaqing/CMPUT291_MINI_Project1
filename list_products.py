@@ -34,6 +34,13 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
     cursor.execute('''SELECT MAX(rid) FROM previews;''')
     rid = cursor.fetchall()[0][0] + 1
 
+    # Set pid to case insensitive
+    cursor.execute('''SELECT pid
+                      FROM products
+                      WHERE products.pid = ? COLLATE NOCASE''', (pid, ))
+    pid = cursor.fetchall()
+    pid = pid[0][0]
+
     # Insert the previews into table previews
     # rating and rtext from user input
     cursor.execute('''INSERT INTO previews (rid, pid, reviewer, rating, rtext, rdate) \
@@ -44,7 +51,7 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
 # ********List reviews of product********
 def list_reviews(cursor, pid):
     # Select all product reviews from previews tables
-    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?;''', (pid,))
+    cursor.execute('''SELECT * FROM previews WHERE previews.pid = ? COLLATE NOCASE;''', (pid,))
     column_title = [[]]
     for i in range(len(cursor.description)):
         column_title[0].append(cursor.description[i][0])
@@ -74,7 +81,7 @@ def list_sales(cursor, pid):
                                 CAST(((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
                                 CAST((((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time 
                         FROM sales LEFT OUTER JOIN bids ON sales.sid = bids.sid
-                        WHERE sales.pid = ?
+                        WHERE sales.pid = ? COLLATE NOCASE
                         AND sales.edate > DATE('now')
                         GROUP BY sales.sid
                         ORDER BY sales.edate ASC;''',  (pid,))

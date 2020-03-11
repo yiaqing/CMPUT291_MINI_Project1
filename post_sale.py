@@ -21,11 +21,18 @@ def post_sale(conn, cursor, lister, edate, descr, cond, pid=None, rprice=None):
         # If the certain products exists, get all the info regarding this product.
         cursor.execute('''SELECT *
                           FROM products
-                          WHERE products.pid = ?;''', (pid, ))
+                          WHERE products.pid = ? COLLATE NOCASE;''', (pid, ))
         if not cursor.fetchall():
             # Check if the certain product exists.
             print("pid out of bounds")
             return 0
+
+    # Set pid to case insensitive
+    cursor.execute('''SELECT pid
+                      FROM products
+                      WHERE products.pid = ? COLLATE NOCASE''', (pid, ))
+    pid = cursor.fetchall()
+    pid = pid[0][0]
 
     # Insert the sales information to the sales table
     # pid and rprice could be NULL

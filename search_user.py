@@ -29,6 +29,18 @@ def search_user(cursor, keyword):
 
 # ********Write a review********
 def write_review(conn, cursor, reviewer, reviewee, rtext, rating):
+    # Set reviewer to case insensitive
+    cursor.execute('''SELECT users.email
+                      FROM users
+                      WHERE users.email = ? COLLATE NOCASE''', (reviewer, ))
+    reviewer = cursor.fetchall()[0][0]
+
+    # Set reviewee to case insensitive
+    cursor.execute('''SELECT users.email
+                      FROM users
+                      WHERE users.email = ? COLLATE NOCASE''', (reviewee, ))
+    reviewee = cursor.fetchall()[0][0]
+
     try:
         # Insert the review to the user
         cursor.execute('''INSERT INTO reviews (reviewer, reviewee, rating, rtext, rdate)
@@ -49,7 +61,7 @@ def list_active(cursor, email):
     # users and sales are joined to gather the info
     cursor.execute('''SELECT sales.sid, sales.lister, sales.pid, sales.edate, sales.descr, sales.cond, sales.rprice
                       FROM users LEFT OUTER JOIN sales ON users.email = sales.lister
-                      WHERE users.email = ?
+                      WHERE users.email = ? COLLATE NOCASE
                       AND sales.edate > DATE('now')
                       ORDER by sales.edate;''', (email, ))
 
@@ -73,7 +85,7 @@ def list_reviews(cursor, email):
     # the user name is from user in put
     cursor.execute('''SELECT reviews.reviewer, reviews.reviewee, reviews.rating, reviews.rtext, reviews.rdate
                       FROM reviews
-                      WHERE reviews.reviewee = ?;''', (email, ))
+                      WHERE reviews.reviewee = ? COLLATE NOCASE;''', (email, ))
 
     # Process the results to convert it to list
     # with column name
