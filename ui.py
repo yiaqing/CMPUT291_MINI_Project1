@@ -240,7 +240,18 @@ def ui_follow_up(conn, cursor, results, current_user):
                         print(str(results[i][3]).center(16) + "|")
 
                 if selected2 == 'lr':
-                    follow_up.list_reviews(cursor, selection)
+                    results = follow_up.list_reviews(cursor, selection)
+                    print("|" + results[0][0].center(30) + "|", end="")
+                    print(results[0][1].center(25) + "|", end="")
+                    print(results[0][2].center(10) + "|", end="")
+                    print(results[0][3].center(40) + "|", end="")
+                    print(results[0][4].center(10) + "|")
+                    for i in range(1, len(results)):
+                        print("|" + str(results[i][0]).center(30) + "|", end="")
+                        print(str(results[i][1]).center(25) + "|", end="")
+                        print(str(results[i][2]).center(10) + "|", end="")
+                        print(str(results[i][3]).center(40) + "|", end="")
+                        print(str(results[i][4]).center(10) + "|")
 
                 if selected2 == 'ee':
                     exit()
@@ -573,11 +584,12 @@ def ui_main_loop(conn, cursor):
             return 0
 
 
-# # '''
-# # Test area
+# '''
+# Test area
 # if __name__ == "__main__":
-#     conn = sqlite3.connect("db.db")
+#     conn = sqlite3.connect("db_original.db")
 #     cursor = conn.cursor()
-#     ui_main_loop(conn, cursor)
+#     # ui_main_loop(conn, cursor)
 #     # ui_search_for_users(conn, cursor, "rachel@gmail.com")
-# # '''
+#     ui_search_for_sales(conn, cursor, "rachel@gmail.com")
+# '''

@@ -75,15 +75,15 @@ def place_bid(conn, cursor, selection, current_user):
 
 
 def list_sales(cursor):
-    cursor.execute('''SELECT    sales.sid, 
-                                sales.descr, 
+    cursor.execute('''SELECT    sales.sid,
+                                sales.descr,
                                 case WHEN bids.amount is null
                                       then sales.rprice
                                   ELSE max(bids.amount)
                                 END status,
                                 CAST((strftime('%s', sales.edate) - strftime('%s', 'now')) / (60 * 60 * 24) AS TEXT) || ' days ' ||
                                 CAST(((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) / (60 * 60) AS TEXT) || ':' ||
-                                CAST((((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time 
+                                CAST((((strftime('%s', sales.edate) - strftime('%s', 'now')) % (60 * 60 * 24)) % (60 * 60)) / 60 AS TEXT) AS time
                         FROM sales LEFT OUTER JOIN bids ON sales.sid = bids.sid
                         WHERE sales.edate > DATE('now')
                         GROUP BY sales.sid
@@ -101,7 +101,7 @@ def list_sales(cursor):
 
 
 def list_reviews(cursor, selection):
-    cursor.execute('''SELECT  reviews.rtext as review_text 
+    cursor.execute('''SELECT reviews.reviewer, reviews.reviewee, reviews.rating, reviews.rtext, reviews.rdate
                     FROM    reviews, sales
                     WHERE   reviews.reviewee = sales.lister
                     AND     sales.sid = ?;''', (selection,))
