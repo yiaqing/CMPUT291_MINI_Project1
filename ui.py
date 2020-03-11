@@ -8,12 +8,12 @@ import getpass
 import re
 import datetime
 import follow_up
-import sqlite3
 
 
 # ********Login in********
 def ui_user_login(cursor):
     print("********Login in********")
+    # Get user input
     print("Enter email: ", end='')
     email = input()
     email = email.lower()
@@ -45,31 +45,38 @@ def ui_user_signup(conn, cursor):
     print("Gender(M/F): ", end="")
     gender = input()
 
+    # Set the email, name, city, gender to case insensitive
     email = email.lower()
     name = name.title()
     city = city.capitalize()
     gender = gender.upper()
 
+    # Check if email out of bounds
     if len(email) > 20:
         print("email out of bounds")
         return 0
 
+    # Check if name out of bounds
     if len(name) > 16:
         print("name out of bounds")
         return 0
 
+    # Check if password out of bounds
     if len(pwd) > 4:
         print("password out of bounds")
         return 0
 
+    # Check if city out of bounds
     if len(city) > 15:
         print("city out of bounds")
         return 0
 
+    # Check if gender out of bounds
     if len(gender) > 1:
         print("gender out of bounds")
         return 0
 
+    # Check if gender is not M or F
     if (gender != "M") and (gender != "F"):
         print("gender out of bounds")
         return 0
@@ -86,15 +93,16 @@ def ui_user_signup(conn, cursor):
 
 # ********Menu********
 def ui_login_menu(conn, cursor):
+    # User login loop
     while True:
         user = 0
         print("********Menu********")
         print("l: Login in")
         print("s: Sign up")
         selected = input()
-        if selected == "l":
+        if (selected == "l") or (selected == "L"):
             user = ui_user_login(cursor)
-        elif selected == "s":
+        elif (selected == "s") or (selected == "S"):
             user = ui_user_signup(conn, cursor)
         else:
             print("No such selection.")
@@ -109,12 +117,14 @@ def ui_login_menu(conn, cursor):
 # ********Write products review********
 def ui_write_product_review(conn, cursor, product_list, current_user):
     print("********Write product review********")
+    # Get user input
     print("pid: ", end="")
     pid = input()
     print("rating (number from 0 to 5): ", end="")
     rating = input()
-    print("rtext (no more than 100 characters): ", end="")
+    print("rtext (no more than 20 characters): ", end="")
     rtext = input()
+    # Set pid to case insensitive
     pid = pid.upper()
 
     reviewer = current_user.lower()
@@ -162,12 +172,14 @@ def ui_list_all_product_reviews(cursor, product_list):
     print("********List all reviews of the product********")
     results = list_products.list_reviews(cursor, pid)
 
+    # print the description of the column name
     print("|" + results[0][0].center(5) + "|", end="")
     print(results[0][1].center(5) + "|", end="")
     print(results[0][2].center(19) + "|", end="")
     print(results[0][3].center(10) + "|", end="")
     print(results[0][4].center(24) + "|")
 
+    # print results
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(5) + "|", end="")
@@ -180,6 +192,8 @@ def ui_list_all_product_reviews(cursor, product_list):
 def ui_list_all_active_sales(conn, cursor, product_list, current_user):
     print("pid: ", end="")
     pid = input()
+    # Set pid to case insensitive
+    pid = pid.upper()
 
     # Check if pid out of bounds
     pids = []
@@ -192,11 +206,13 @@ def ui_list_all_active_sales(conn, cursor, product_list, current_user):
     results = list_products.list_sales(cursor, pid)
 
     print("********List all active sales associated to the product********")
+    # Print the description the column name
     print("|" + results[0][0].center(5) + "|", end="")
     print(results[0][1].center(40) + "|", end="")
     print(results[0][2].center(19) + "|", end="")
     print(results[0][3].center(16) + "|")
 
+    # Print the results
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(40) + "|", end="")
@@ -207,15 +223,18 @@ def ui_list_all_active_sales(conn, cursor, product_list, current_user):
 
 def ui_follow_up(conn, cursor, results, current_user):
     while True:
+        # follow up sub loop
         print("\n********Menu********")
         print("sd: select a sale for detailed information")
         print("ee: EXIT")
 
+        # Set selection to case insensitive
         selected = input().lower()
         if selected == 'sd':
             selection = follow_up.display_all_sales(results)
             follow_up.display_information(cursor, selection)
             while True:
+                # Search sub loop
                 print("\n********Menu********")
                 print("pb: place a bid on the selected sale")
                 print("ls: list all active sales of the seller")
@@ -223,23 +242,32 @@ def ui_follow_up(conn, cursor, results, current_user):
                 print("ee: EXIT")
                 selected2 = input().lower()
                 if selected2 == 'pb':
-                    follow_up.place_bid(conn, cursor, selection, current_user)
+                    try:
+                        follow_up.place_bid(conn, cursor, selection, current_user)
+                    except:
+                        print("Cannot bid")
+                        return 0
+                    return 0
 
                 if selected2 == 'ls':
                     results = follow_up.list_sales(cursor)
+                    # Print the description of columns
                     print("********List all active sales associated to the product********")
                     print("|" + results[0][0].center(5) + "|", end="")
                     print(results[0][1].center(40) + "|", end="")
                     print(results[0][2].center(19) + "|", end="")
                     print(results[0][3].center(16) + "|")
 
+                    # Print the data
                     for i in range(1, len(results)):
                         print("|" + str(results[i][0]).center(5) + "|", end="")
                         print(str(results[i][1]).center(40) + "|", end="")
                         print(str(results[i][2]).center(19) + "|", end="")
                         print(str(results[i][3]).center(16) + "|")
+                    return 0
 
                 if selected2 == 'lr':
+                    # Print the description of the columns
                     results = follow_up.list_reviews(cursor, selection)
                     print("|" + results[0][0].center(30) + "|", end="")
                     print(results[0][1].center(25) + "|", end="")
@@ -247,6 +275,7 @@ def ui_follow_up(conn, cursor, results, current_user):
                     print(results[0][3].center(40) + "|", end="")
                     print(results[0][4].center(10) + "|")
 
+                    # Print the results
                     for i in range(1, len(results)):
                         print("|" + str(results[i][0]).center(30) + "|", end="")
                         print(str(results[i][1]).center(25) + "|", end="")
@@ -254,23 +283,29 @@ def ui_follow_up(conn, cursor, results, current_user):
                         print(str(results[i][3]).center(40) + "|", end="")
                         print(str(results[i][4]).center(10) + "|")
 
-                if selected2 == 'ee':
-                    exit()
+                    return 0
 
-        if selected == 'ee':
-            exit()
+                if selected2 == 'ee':
+                    return 0
+
+        if (selected == 'ee') or (selected == 'EE'):
+            return 0
+
+        return 0
 
 
 # ********list products menu********
 def ui_list_products(conn, cursor, current_user):
     print("********List all products with some active sales associated to them********")
     results = list_products.list_products(cursor)
+    # Print the description of the column name
     print("|" + results[0][0].center(5) + "|", end="")
     print(results[0][1].center(30) + "|", end="")
     print(results[0][2].center(19) + "|", end="")
     print(results[0][3].center(16) + "|", end="")
     print(results[0][4].center(24) + "|")
 
+    # Print the data
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(30) + "|", end="")
@@ -288,12 +323,15 @@ def ui_list_products(conn, cursor, current_user):
         selected = input()
         if (selected == "W") or (selected == "w"):
             ui_write_product_review(conn, cursor, results, current_user)
+            return 0
 
         elif (selected == "R") or (selected == "r"):
             ui_list_all_product_reviews(cursor, results)
+            return 0
 
         elif (selected == "S") or (selected == "s"):
             ui_list_all_active_sales(conn, cursor, results, current_user)
+            return 0
 
         elif (selected == "E") or (selected == "e"):
             return 0
@@ -305,12 +343,15 @@ def ui_list_products(conn, cursor, current_user):
 # ********Search for sales********
 def ui_search_keywords(conn, cursor, current_user):
     print("Keywords (split by space): ", end="")
+    # Set keywords to case insensitive
     keywords_list = input()
     keywords_list = keywords_list.lower()
+    # Check if there is any SQL meta word
     if injection_detection.search(keywords_list):
         print("SQL injection.")
         return 0
 
+    # Convert the words into list
     keywords_list = keywords_list.split()
 
     print("********List all sales containing keywords********")
@@ -320,11 +361,13 @@ def ui_search_keywords(conn, cursor, current_user):
         print("TRY ANOTHER ONE")
         ui_search_keywords(conn, cursor, current_user)
     else:
+        # print the column name
         print("|" + results[0][0].center(5) + "|", end="")
         print(results[0][1].center(40) + "|", end="")
         print(results[0][2].center(19) + "|", end="")
         print(results[0][3].center(16) + "|")
 
+        # print the results
         for i in range(1, len(results)):
             print("|" + str(results[i][0]).center(5) + "|", end="")
             print(str(results[i][1]).center(40) + "|", end="")
@@ -342,6 +385,7 @@ def ui_search_for_sales(conn, cursor, current_user):
         selected = input()
         if (selected == "ss") or (selected == "SS"):
             ui_search_keywords(conn, cursor, current_user)
+            return 0
 
         elif (selected == "ee") or (selected == "EE"):
             print("Exit.")
@@ -355,6 +399,7 @@ def ui_search_for_sales(conn, cursor, current_user):
 def ui_post_a_sale(conn, cursor, current_user):
     print("pid: ", end="")
     pid = input()
+    pid = pid.upper()
     if pid == "":
         pid = None
 
@@ -366,6 +411,7 @@ def ui_post_a_sale(conn, cursor, current_user):
     print("edate(yyyy-mm-dd): ", end="")
     edate = input()
     # Check if date is out of bounds
+    # Also check if the date is legal
     if re.fullmatch(r"^((?!0000)[0-9]{4}-((0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-8])|(0[13-9]|1[0-2])-(29|30)|" \
                     r"(0[13578]|1[02])-31)|([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579]" \
                     r"[26])00)-02-29)$", edate) is None:
@@ -408,6 +454,7 @@ def ui_post_sale(conn, cursor, current_user):
         selected = input()
         if (selected == "ps") or (selected == "PS"):
             ui_post_a_sale(conn, cursor, current_user)
+            return 0
         if (selected == "ee") or (selected == "EE"):
             return 0
 
@@ -416,6 +463,8 @@ def ui_post_sale(conn, cursor, current_user):
 def ui_list_all_reviews(cursor, user_list):
     print("Email: ", end="")
     email = input()
+    # Set email to case insensitive
+    email = email.lower()
     # Check if email out of bounds
     flag = 1
     for i in range(len(user_list)):
@@ -427,12 +476,14 @@ def ui_list_all_reviews(cursor, user_list):
 
     results = search_user.list_reviews(cursor, email)
 
+    # print the column name
     print("|" + results[0][0].center(30) + "|", end="")
     print(results[0][1].center(15) + "|", end="")
     print(results[0][2].center(10) + "|", end="")
     print(results[0][3].center(15) + "|", end="")
     print(results[0][4].center(10) + "|")
 
+    # print the results
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(30) + "|", end="")
         print(str(results[i][1]).center(15) + "|", end="")
@@ -445,6 +496,8 @@ def ui_list_all_reviews(cursor, user_list):
 def ui_list_all_active_users(cursor, user_list):
     print("Email: ", end="")
     email = input()
+    # Set email to case insensitive
+    email = email.lower()
     # Check if email out of bounds
     flag = 1
     for i in range(len(user_list)):
@@ -456,6 +509,7 @@ def ui_list_all_active_users(cursor, user_list):
 
     results = search_user.list_active(cursor, email)
 
+    # Print the column name
     print("|" + results[0][0].center(5) + "|", end="")
     print(results[0][1].center(20) + "|", end="")
     print(results[0][2].center(10) + "|", end="")
@@ -464,6 +518,7 @@ def ui_list_all_active_users(cursor, user_list):
     print(results[0][5].center(10) + "|", end="")
     print(results[0][6].center(10) + "|")
 
+    # Print the data
     for i in range(1, len(results)):
         print("|" + str(results[i][0]).center(5) + "|", end="")
         print(str(results[i][1]).center(20) + "|", end="")
@@ -477,7 +532,9 @@ def ui_list_all_active_users(cursor, user_list):
 # ********ui_write_review********
 def ui_write_user_review(conn, cursor, user_list, reviewer):
     print("Reviewee email: ", end="")
+    # Set the email to case insensitive
     email = input()
+    email = email.lower()
     print("Rtext: ", end="")
     rtext = input()
     print("rating: ", end="")
@@ -546,10 +603,13 @@ def ui_search_for_users(conn, cursor, current_user):
         selected = input()
         if (selected == "wr") or (selected == "WR"):
             ui_write_user_review(conn, cursor, results, current_user)
+            return 0
         elif (selected == "ll") or (selected == "LL"):
             ui_list_all_active_users(cursor, results)
+            return 0
         elif (selected == "lr") or (selected == "LR"):
             ui_list_all_reviews(cursor, results)
+            return 0
         elif (selected == "ee") or (selected == "EE"):
             return 0
         else:
@@ -558,8 +618,7 @@ def ui_search_for_users(conn, cursor, current_user):
 
 # ********Main loop********
 def ui_main_loop(conn, cursor):
-    # current_user = ui_login_menu(conn, cursor)
-    current_user = 'ibev@gmail.com'
+    current_user = ui_login_menu(conn, cursor)
     while True:
         print("********Menu********")
         print("lp: List products")
@@ -571,22 +630,12 @@ def ui_main_loop(conn, cursor):
         selected = input().lower()
         if selected == "lp":
             ui_list_products(conn, cursor, current_user)
-
         elif selected == "ss":
             ui_search_for_sales(conn, cursor, current_user)
-
         elif selected == "ps":
             ui_post_sale(conn, cursor, current_user)
-
         elif selected == "su":
             ui_search_for_users(conn, cursor, current_user)
-
         elif selected == "ee":
             print("Exit")
             return 0
-
-
-# '''
-# Test area
-#     # ui_search_for_users(conn, cursor, "rachel@gmail.com")
-# '''

@@ -3,7 +3,6 @@ import sys
 import ui
 
 
-# zqq
 # ********Initialization********
 def conn_db():
     conn = sqlite3.connect(sys.argv[1])
@@ -18,7 +17,12 @@ def disconn_db(conn, cursor):
 
 # ********Main********
 if __name__ == "__main__":
-    conn = conn_db()
+    try:
+        conn = conn_db()
+    except:
+        print("Database connection error.")
+        exit()
+
     cursor = conn.cursor()
     cursor.execute('''PRAGMA foreign_keys = ON;''')
 

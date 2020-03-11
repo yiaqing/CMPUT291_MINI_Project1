@@ -115,14 +115,3 @@ def list_reviews(cursor, selection):
     results = column_title + results
 
     return results
-
-
-if __name__ == "__main__":
-    conn = sqlite3.connect("db.db")
-    cursor = conn.cursor()
-    # display_information(cursor, 'S01')
-    place_bid(conn, cursor, 'S14', 'qianqiu@ualberta.ca')
-    # results = list_reviews(cursor, 'S02')
-    # print("|" + results[0][0].center(40) + "|")
-    # for i in range(1, len(results)):
-    #     print("|" + str(results[i][0]).center(40) + "|")

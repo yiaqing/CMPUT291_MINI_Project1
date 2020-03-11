@@ -3,9 +3,11 @@ import sqlite3
 
 # Q1
 # ********List qualifying products information********
-
-
 def list_products(cursor):
+    # Select the info from table products and sales
+    # Join these two tables together on pid to gather the info
+    # sales.edate must be in the future
+    # the results is sorted by number of sales
     cursor.execute('''SELECT products.pid, products.descr, COUNT(DISTINCT previews.rid) AS number_of_reviews, \
                       ROUND(AVG(previews.rating), 2) AS average_rating, COUNT(DISTINCT sales.sid) AS number_of_active_sales \
                       FROM (products LEFT OUTER JOIN sales ON products.pid = sales.pid) \
@@ -32,6 +34,8 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
     cursor.execute('''SELECT MAX(rid) FROM previews;''')
     rid = cursor.fetchall()[0][0] + 1
 
+    # Insert the previews into table previews
+    # rating and rtext from user input
     cursor.execute('''INSERT INTO previews (rid, pid, reviewer, rating, rtext, rdate) \
                       VALUES (?, ?, ?, ?, ?, DATE('now'));''', (rid, pid, reviewer, rating, rtext))
     conn.commit()
@@ -39,6 +43,7 @@ def write_preview(conn, cursor, pid, reviewer, rating, rtext):
 
 # ********List reviews of product********
 def list_reviews(cursor, pid):
+    # Select all product reviews from previews tables
     cursor.execute('''SELECT * FROM previews WHERE previews.pid = ?;''', (pid,))
     column_title = [[]]
     for i in range(len(cursor.description)):
@@ -55,13 +60,10 @@ def list_reviews(cursor, pid):
 
 # *********List all associative active sales********
 def list_sales(cursor, pid):
-    # cursor.execute('''SELECT sales.sid AS sid, sales.lister AS lister, \
-    #                   sales.pid AS pid, sales.edate AS edate, sales.descr AS descr, \
-    #                   sales.cond AS cond, sales.rprice AS rprice \
-    #                   FROM sales
-    #                   WHERE sales.pid = ?
-    #                   AND sales.edate > DATE('now')
-    #                   ORDER BY sales.edate ASC;''', (pid,))
+    # Join table sales and bids on sid
+    # select info sales.sid, sale.description, max bid amount.
+    # If there is no bid, reserved price will be the min bid amount
+    # CAST is implemented to convert time to remaining time
     cursor.execute('''SELECT    sales.sid, 
                                 sales.descr, 
                                 case WHEN  bids.amount is null
@@ -86,20 +88,3 @@ def list_sales(cursor, pid):
     results = column_title + results
 
     return results
-
-
-if __name__ == "__main__":
-    conn = sqlite3.connect("db.db")
-    cursor = conn.cursor()
-    print("********List all products with some active sales associated to them********")
-    results = list_sales(cursor, 'G01')
-    print("|" + results[0][0].center(5) + "|", end="")
-    print(results[0][1].center(30) + "|", end="")
-    print(results[0][2].center(19) + "|", end="")
-    print(results[0][3].center(16) + "|")
-
-    for i in range(1, len(results)):
-        print("|" + str(results[i][0]).center(5) + "|", end="")
-        print(str(results[i][1]).center(30) + "|", end="")
-        print(str(results[i][2]).center(19) + "|", end="")
-        print(str(results[i][3]).center(16) + "|")
