@@ -111,9 +111,9 @@ def ui_write_product_review(conn, cursor, product_list, current_user):
     print("********Write product review********")
     print("pid: ", end="")
     pid = input()
-    print("rating: ", end="")
+    print("rating (number from 0 to 5): ", end="")
     rating = input()
-    print("rtext: ", end="")
+    print("rtext (no more than 100 characters): ", end="")
     rtext = input()
     pid = pid.upper()
 
@@ -129,7 +129,7 @@ def ui_write_product_review(conn, cursor, product_list, current_user):
     for i in range(1, len(product_list)):
         pids.append(product_list[i][0])
     if pid not in pids:
-        print("pid out of bound")
+        print("pid does not exist")
         return 0
 
     # Check if rtext out of bounds
@@ -246,6 +246,7 @@ def ui_follow_up(conn, cursor, results, current_user):
                     print(results[0][2].center(10) + "|", end="")
                     print(results[0][3].center(40) + "|", end="")
                     print(results[0][4].center(10) + "|")
+
                     for i in range(1, len(results)):
                         print("|" + str(results[i][0]).center(30) + "|", end="")
                         print(str(results[i][1]).center(25) + "|", end="")
@@ -315,7 +316,7 @@ def ui_search_keywords(conn, cursor, current_user):
     print("********List all sales containing keywords********")
     results = search_sales.search_sales(conn, cursor, keywords_list)
     if len(results) == 1:
-        print("NO SALES AVAILABLE FOR THE KEYWORDS ENTERED")
+        print("NO ACTIVE SALES AVAILABLE FOR THE KEYWORDS ENTERED")
         print("TRY ANOTHER ONE")
         ui_search_keywords(conn, cursor, current_user)
     else:
@@ -534,6 +535,7 @@ def ui_search_for_users(conn, cursor, current_user):
         print(str(results[i][3]).center(15) + "|", end="")
         print(str(results[i][4]).center(6) + "|")
 
+
     while True:
         print("********Menu********")
         print("wr: Write a review")
@@ -586,10 +588,5 @@ def ui_main_loop(conn, cursor):
 
 # '''
 # Test area
-# if __name__ == "__main__":
-#     conn = sqlite3.connect("db.db")
-#     cursor = conn.cursor()
-#     # ui_main_loop(conn, cursor)
 #     # ui_search_for_users(conn, cursor, "rachel@gmail.com")
-#     ui_search_for_sales(conn, cursor, "rachel@gmail.com")
 # '''
