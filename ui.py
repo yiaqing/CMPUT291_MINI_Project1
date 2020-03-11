@@ -219,7 +219,7 @@ def ui_follow_up(conn, cursor, results, current_user):
                 print("\n********Menu********")
                 print("pb: place a bid on the selected sale")
                 print("ls: list all active sales of the seller")
-                print("lr: list all reviews of the selected sale")
+                print("lr: list all reviews of the seller who made the selected sale")
                 print("ee: EXIT")
                 selected2 = input().lower()
                 if selected2 == 'pb':
