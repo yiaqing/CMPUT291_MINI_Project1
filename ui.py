@@ -224,10 +224,24 @@ def ui_follow_up(conn, cursor, results, current_user):
                 selected2 = input().lower()
                 if selected2 == 'pb':
                     follow_up.place_bid(conn, cursor, selection, current_user)
+
                 if selected2 == 'ls':
-                    follow_up.list_sales(cursor)
+                    results = follow_up.list_sales(cursor)
+                    print("********List all active sales associated to the product********")
+                    print("|" + results[0][0].center(5) + "|", end="")
+                    print(results[0][1].center(40) + "|", end="")
+                    print(results[0][2].center(19) + "|", end="")
+                    print(results[0][3].center(16) + "|")
+
+                    for i in range(1, len(results)):
+                        print("|" + str(results[i][0]).center(5) + "|", end="")
+                        print(str(results[i][1]).center(40) + "|", end="")
+                        print(str(results[i][2]).center(19) + "|", end="")
+                        print(str(results[i][3]).center(16) + "|")
+
                 if selected2 == 'lr':
                     follow_up.list_reviews(cursor, selection)
+
                 if selected2 == 'ee':
                     exit()
 
@@ -559,10 +573,11 @@ def ui_main_loop(conn, cursor):
             return 0
 
 
-'''
-Test area
-if __name__ == "__main__":
-    conn = sqlite3.connect("db.db")
-    cursor = conn.cursor()
-    ui_search_for_users(conn, cursor, "rachel@gmail.com")
-'''
+# # '''
+# # Test area
+# if __name__ == "__main__":
+#     conn = sqlite3.connect("db.db")
+#     cursor = conn.cursor()
+#     ui_main_loop(conn, cursor)
+#     # ui_search_for_users(conn, cursor, "rachel@gmail.com")
+# # '''
