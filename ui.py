@@ -435,7 +435,7 @@ def ui_post_a_sale(conn, cursor, current_user):
     print("cond: ", end="")
     cond = input()
     # Check if cond out of bounds
-    if len(cond) > 10:
+    if len(cond) > 50:
         print("cond out of bounds")
         return 0
     if injection_detection.search(cond):
@@ -551,7 +551,7 @@ def ui_write_user_review(conn, cursor, user_list, reviewer):
         return 0
 
     # Check if rtext out of bounds
-    if len(rtext) > 20:
+    if len(rtext) > 100:
         print("rtext out of bounds.")
     if injection_detection.search(rtext):
         print("Injection.")
